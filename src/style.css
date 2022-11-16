@@ -1,0 +1,49 @@
+:root {
+  --white: #ffffffaf;
+  --gray: #ffffff88;
+  --border: #ffffff3d;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Work Sans", sans-serif;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  color: #ffffffaf;
+  font-weight: 900;
+}
+
+#app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  border: 6px solid var(--border);
+  border-radius: 2rem;
+}
+
+small {
+  font-size: 1.25rem;
+}
+
+.secondary {
+  font-size: 1.625rem;
+  color: var(--gray);
+}
+
+.primary-huge {
+  font-size: 3.5rem;
+  color: var(--white);
+}
+
+.primary {
+  font-size: 3rem;
+  color: var(--white);
+}
