@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
+
+// Font Awesome
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faGlobe, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(faGlobe, faLocationDot);
 
 defineProps<{ 
   leftrank: number,
@@ -21,27 +28,60 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
 <template>
     <div class="footer">
         <div class="footer-left">
-            <div class="footer-left-image">
-                <img :src="leftpicture || leftDefaultProfilePicture" />
-            </div>
-            <div class="footer-left-name">
-                <div class="footer-left-name-text primary">{{ leftname ?? "Goosy" }}</div>
-                <div class="footer-left-name-rank secondary"><small>#</small>{{ leftrank ?? 42 }}</div>
+            <div class="grid">
+                <div class="ppic"><img :src="leftpicture || leftDefaultProfilePicture" /></div>
+
+                <div class="pflag primary"></div>
+                <div class="pname primary">{{ leftname ?? "GoosyChan" }}</div>
+
+                <div class="prankicon secondary"><FontAwesomeIcon icon="fa-solid fa-globe" /></div>
+                <div class="prank secondary">{{ leftrank ?? 456 }}</div>
+
+                <div class="playerlocalrankicon secondary"><FontAwesomeIcon icon="fa-solid fa-location-dot" /></div>
+                <div class="plocalrank secondary">{{ 23 }}</div>
             </div>
         </div>
         <div class="footer-right">
-            <div class="footer-right-image">
-                <img :src="rightpicture || rightDefaultProfilePicture" />
-            </div>
-            <div class="footer-right-name">
-                <div class="footer-right-name-text primary">{{ rightname ?? "Checksum" }}</div>
-                <div class="footer-right-name-rank secondary"><small>#</small>{{ rightrank ?? 69 }}</div>
+            <div class="grid">
+                <div class="pname primary">{{ rightname ?? "Checksum" }}</div>
+                <div class="pflag primary"></div>
+
+                <div class="ppic"><img :src="rightpicture || rightDefaultProfilePicture" /></div>
+
+                <div class="prank secondary">{{ rightrank ?? 456 }}</div>
+                <div class="prankicon secondary"><FontAwesomeIcon icon="fa-solid fa-globe" /></div>
+
+                <div class="plocalrank secondary">{{ 23 }}</div>
+                <div class="playerlocalrankicon secondary"><FontAwesomeIcon icon="fa-solid fa-location-dot" /></div>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
+
+.footer-right .grid {
+    display: grid;
+    grid-template-columns: 15fr 2fr 5fr;
+}
+
+.footer-left .grid {
+    display: grid;
+    grid-template-columns: 5fr 2fr 15fr;
+}
+
+.footer-right .ppic {
+    grid-row-start: 1;
+    grid-row-end: 4;
+    grid-column: 3;
+}
+
+.footer-left .ppic {
+    grid-row-start: 1;
+    grid-row-end: 4;
+    grid-column: 1;
+}
+
 .footer {
     width: 100%;
     height: 15%;
@@ -54,37 +94,32 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
 .footer-left,
 .footer-right {
     flex: 1;
+    height: 100%;
     display: flex;
+    align-items: center;
 }
 
-.footer-right-image {
+.footer-right .grid {
     margin-right: 4rem;
+    text-align: right;
 }
 
-.footer-left-image {
+.footer-left .grid {
     margin-left: 4rem;
 }
 
-.footer-right {
-  flex-direction: row-reverse;
+.prankicon,
+.playerlocalrankicon {
+    text-align: center;
 }
 
-.footer-left-image img,
-.footer-right-image img {
+.footer-right {
+    flex-direction: row-reverse;
+}
+
+.ppic img {
   width: 12vh;
   height: 12vh;
 }
 
-.footer-right-name {
-  text-align: right;
-  margin: auto;
-  margin-right: 2rem;
-  height: fit-content;
-}
-
-.footer-left-name {
-  margin: auto;
-  margin-left: 2rem;
-  height: fit-content;
-}
 </style>

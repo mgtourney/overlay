@@ -10,7 +10,6 @@ const routes = {
     'modview': ModView,
 };
 const currentPath = ref(window.location.hash);
-    console.log(window.location.hash)
 
 window.addEventListener('hashchange', () => {
     currentPath.value = window.location.hash
