@@ -15,8 +15,6 @@ const props = defineProps<{
     rightlocalrank: number,
     leftname: string,
     rightname: string,
-    leftflag: string,
-    rightflag: string,
     leftpicture: string,
     rightpicture: string,
     mapname: string,

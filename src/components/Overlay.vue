@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import Header from './in-map-view/Header.vue';
 import Main from './in-map-view/Main.vue';
 import Footer from './in-map-view/Footer.vue';
@@ -34,7 +34,7 @@ function onHeartBeat(data) {
 }
 
 function onMatchUpdate(ms) {
-    console.log("Matches Update", matches);
+    console.log("matches Update", ms);
     matches.value = ms.matches;
 }
 
@@ -51,9 +51,9 @@ function onUsersUpdate(pls) {
 
 async function updateScoresabers() {
     for (const player of players.value) {
-        if (scoresabers[player.user_id] == null) {
+        if (scoresabers.value[player.user_id] == null) {
             const scoresaber = await getScoresaber(player.user_id);
-            scoresabers[player.user_id] = scoresaber;
+            scoresabers.value[player.user_id] = scoresaber;
         }
     }
 }
@@ -61,9 +61,7 @@ async function updateScoresabers() {
 async function getScoresaber(playerId: string): Promise<any> {
     try {
         const response = await fetch(`https://scoresaber.com/api/player/${playerId}/full`);
-        const result = await response.json();
-        result.countryFlag = `https://flagcdn.com/h240/${result.country.toLowerCase()}.png`;
-        return result;
+        return await response.json();
     } catch (e) {
         console.error(e);
         new Promise((resolve) => setTimeout(resolve, 1000));
@@ -71,29 +69,30 @@ async function getScoresaber(playerId: string): Promise<any> {
     }
 }
 
-const leftFlag = scoresabers[players[0]?.user_id]?.countryFlag;
-const rightFlag = scoresabers[players[1]?.user_id]?.countryFlag;
-const leftProfilePic = scoresabers[players[0]?.user_id]?.profilePicture;
-const rightProfilePic = scoresabers[players[1]?.user_id]?.profilePicture;
-const leftRank = scoresabers[players[0]?.user_id]?.rank;
-const rightRank = scoresabers[players[1]?.user_id]?.rank;
-const leftlocalrank = scoresabers[players[0]?.user_id]?.countryRank;
-const rightlocalrank = scoresabers[players[1]?.user_id]?.countryRank;
-const leftCountry = scoresabers[players[0]?.user_id]?.country?.toLowerCase?.();
-const rightCountry = scoresabers[players[1]?.user_id]?.country?.toLowerCase?.();
-const leftname = players?.[0]?.name;
-const rightname = players?.[1]?.name;
-const mapname = matches?.[0]?.selected_level?.name;
-const mapdiffname = matches?.[0]?.selected_difficulty;
+const lpid = computed(() => players.value[0]?.user_id);
+const rpid = computed(() => players.value[1]?.user_id);
+const leftProfilePic = computed(() => scoresabers.value[lpid.value]?.profilePicture ?? "https://randomuser.me/api/portraits/men/1.jpg");
+const rightProfilePic = computed(() => scoresabers.value[rpid.value]?.profilePicture ?? "https://randomuser.me/api/portraits/women/1.jpg");
+const leftRank = computed(() => scoresabers.value[lpid.value]?.rank ?? 0);
+const rightRank = computed(() => scoresabers.value[rpid.value]?.rank ?? 0);
+const leftlocalrank = computed(() => scoresabers.value[lpid.value]?.countryRank ?? 0);
+const rightlocalrank = computed(() => scoresabers.value[rpid.value]?.countryRank ?? 0);
+const leftCountry = computed(() => scoresabers.value[lpid.value]?.country?.toLowerCase?.() ?? "us");
+const rightCountry = computed(() => scoresabers.value[rpid.value]?.country?.toLowerCase?.() ?? "us");
+const leftname = computed(() => players.value?.[0]?.name ?? "Player 1");
+const rightname = computed(() => players.value?.[1]?.name ?? "Player 2");
+const mapname = computed(() => matches.value?.[0]?.selected_level?.name ?? "Map Name");
+const mapdiffname = computed(() => matches.value?.[0]?.selected_difficulty ?? "Map Difficulty");
 
-const leftmisses = scores[players[0]?.user_id]?.totalMisses;
-const rightmisses = scores[players[1]?.user_id]?.totalMisses;
-const leftscore = scores[players[0]?.user_id]?.score;
-const rightscore = scores[players[1]?.user_id]?.score;
-const leftaccuracy = scores[players[0]?.user_id]?.accuracy;
-const rightaccuracy = scores[players[1]?.user_id]?.accuracy;
-const leftlead = 0;
-const rightlead = 0;
+const leftmisses = computed(() => scores.value[lpid.value]?.totalMisses ?? (players.value?.[0] ? 0 : "Waiting for player 1"));
+const rightmisses = computed(() => scores.value[rpid.value]?.totalMisses ?? (players.value?.[1] ? 0 : "Waiting for player 2"));
+const leftscore = computed(() => scores.value[lpid.value]?.score ?? 0);
+const rightscore = computed(() => scores.value[rpid.value]?.score ?? 0);
+const leftaccuracy = computed(() => scores.value[lpid.value]?.accuracy ?? "00.00");
+const rightaccuracy = computed(() => scores.value[rpid.value]?.accuracy ?? "00.00");
+const leftlead = computed(() => 0);
+const rightlead = computed(() => 0);
+
 </script>
 
 <template>
@@ -123,8 +122,6 @@ const rightlead = 0;
         :rightname="rightname"
         :leftpicture="leftProfilePic"
         :rightpicture="rightProfilePic"
-        :leftflag="leftFlag"
-        :rightflag="rightFlag"
         :leftCountry="leftCountry"
         :rightCountry="rightCountry"
         :mapname="mapname"
