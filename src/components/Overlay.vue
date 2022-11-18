@@ -77,6 +77,23 @@ const leftProfilePic = scoresabers[players[0]?.user_id]?.profilePicture;
 const rightProfilePic = scoresabers[players[1]?.user_id]?.profilePicture;
 const leftRank = scoresabers[players[0]?.user_id]?.rank;
 const rightRank = scoresabers[players[1]?.user_id]?.rank;
+const leftlocalrank = scoresabers[players[0]?.user_id]?.countryRank;
+const rightlocalrank = scoresabers[players[1]?.user_id]?.countryRank;
+const leftCountry = scoresabers[players[0]?.user_id]?.country?.toLowerCase?.();
+const rightCountry = scoresabers[players[1]?.user_id]?.country?.toLowerCase?.();
+const leftname = players?.[0]?.name;
+const rightname = players?.[1]?.name;
+const mapname = matches?.[0]?.selected_level?.name;
+const mapdiffname = matches?.[0]?.selected_difficulty;
+
+const leftmisses = scores[players[0]?.user_id]?.totalMisses;
+const rightmisses = scores[players[1]?.user_id]?.totalMisses;
+const leftscore = scores[players[0]?.user_id]?.score;
+const rightscore = scores[players[1]?.user_id]?.score;
+const leftaccuracy = scores[players[0]?.user_id]?.accuracy;
+const rightaccuracy = scores[players[1]?.user_id]?.accuracy;
+const leftlead = 0;
+const rightlead = 0;
 </script>
 
 <template>
@@ -86,17 +103,32 @@ const rightRank = scoresabers[players[1]?.user_id]?.rank;
         </video>
         <div class="blur"></div>
     </div>
-    <Header />
+    <Header 
+        :leftmisses="leftmisses"
+        :rightmisses="rightmisses"
+        :leftscore="leftscore"
+        :rightscore="rightscore"
+        :leftaccuracy="leftaccuracy"
+        :rightaccuracy="rightaccuracy"
+        :leftlead="leftlead"
+        :rightlead="rightlead"
+    />
     <Main />
     <Footer
         :leftrank="leftRank"
         :rightrank="rightRank"
-        :leftname="players?.[0]?.name"
-        :rightname="players?.[1]?.name"
+        :leftlocalrank="leftlocalrank"
+        :rightlocalrank="rightlocalrank"
+        :leftname="leftname"
+        :rightname="rightname"
         :leftpicture="leftProfilePic"
         :rightpicture="rightProfilePic"
         :leftflag="leftFlag"
         :rightflag="rightFlag"
+        :leftCountry="leftCountry"
+        :rightCountry="rightCountry"
+        :mapname="mapname"
+        :mapdiffname="mapdiffname"
     />
 </template>
 

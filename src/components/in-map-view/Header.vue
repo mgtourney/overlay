@@ -1,37 +1,52 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed } from 'vue';
+
+const props = defineProps<{
+    leftmisses: number,
+    rightmisses: number,
+    leftscore: number,
+    rightscore: number,
+    leftaccuracy: number,
+    rightaccuracy: number,
+    leftlead: number,
+    rightlead: number,
+}>();
+
+const leftscoreformatted = computed(() => props.leftscore?.toLocaleString?.()?.replace?.(/,/g, ' '));
+const rightscoreformatted = computed(() => props.rightscore?.toLocaleString?.()?.replace?.(/,/g, ' '));
+
 </script>
 
 <template>
   <div class="header">
     <div class="header-left">
       <div class="lead">
-        <div></div>
-        <div></div>
-        <div class="active"></div>
+        <div :active="leftlead >= 3"></div>
+        <div :active="leftlead >= 2"></div>
+        <div :active="leftlead >= 1"></div>
       </div>
       <div class="misses">
-        <div class="misses-count primary-huge">0</div>
+        <div class="misses-count primary-huge">{{ leftmisses ?? 0 }}</div>
         <div class="misses-text secondary">MISSES</div>
       </div>
       <div class="scores">
-        <div class="acc primary-huge">96.67</div>
-        <div class="score secondary">2 571 602</div>
+        <div class="acc primary-huge">{{ leftaccuracy ?? "00.00" }}</div>
+        <div class="score secondary">{{ leftscoreformatted ?? "0" }}</div>
       </div>
     </div>
     <div class="header-right">
       <div class="scores">
-        <div class="acc primary-huge">93.50</div>
-        <div class="score secondary">2 305 643</div>
+        <div class="acc primary-huge">{{ rightaccuracy ?? "00.00" }}</div>
+        <div class="score secondary">{{ rightscoreformatted ?? "0" }}</div>
       </div>
       <div class="misses">
-        <div class="misses-count primary-huge">3</div>
+        <div class="misses-count primary-huge">{{ rightmisses ?? 0 }}</div>
         <div class="misses-text secondary">MISSES</div>
       </div>
       <div class="lead">
-        <div></div>
-        <div></div>
-        <div class="active"></div>
+        <div :active="rightlead >= 3"></div>
+        <div :active="rightlead >= 2"></div>
+        <div :active="rightlead >= 1"></div>
       </div>
     </div>
   </div>
@@ -56,7 +71,7 @@ import { ref } from "vue";
   background-color: var(--border);
 }
 
-.lead div.active {
+.lead div[active="true"] {
   background-color: var(--white);
 }
 
