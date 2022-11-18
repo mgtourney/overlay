@@ -31,7 +31,7 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
             <div class="grid">
                 <div class="ppic"><img :src="leftpicture || leftDefaultProfilePicture" /></div>
 
-                <div class="pflag primary"></div>
+                <div class="pflag primary"><img src="https://flagcdn.com/h40/de.jpg" /></div>
                 <div class="pname primary">{{ leftname ?? "GoosyChan" }}</div>
 
                 <div class="prankicon secondary"><FontAwesomeIcon icon="fa-solid fa-globe" /></div>
@@ -44,7 +44,7 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
         <div class="footer-right">
             <div class="grid">
                 <div class="pname primary">{{ rightname ?? "Checksum" }}</div>
-                <div class="pflag primary"></div>
+                <div class="pflag primary"><img src="https://flagcdn.com/h40/us.jpg" /></div>
 
                 <div class="ppic"><img :src="rightpicture || rightDefaultProfilePicture" /></div>
 
@@ -55,19 +55,34 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
                 <div class="playerlocalrankicon secondary"><FontAwesomeIcon icon="fa-solid fa-location-dot" /></div>
             </div>
         </div>
+        <div class="footer-map primary">
+            DRAIN OF INCARNATION <small class="secondary">• EXPERT+</small>
+        </div>
     </div>
 </template>
 
 <style scoped>
 
+.footer-map {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2rem;
+}
+
+.footer-map small {
+    font-size: 1.25rem;
+}
+
 .footer-right .grid {
     display: grid;
-    grid-template-columns: 15fr 2fr 5fr;
+    grid-template-columns: 15fr 3fr 5fr;
 }
 
 .footer-left .grid {
     display: grid;
-    grid-template-columns: 5fr 2fr 15fr;
+    grid-template-columns: 5fr 3fr 15fr;
 }
 
 .footer-right .ppic {
@@ -89,6 +104,7 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
     justify-content: space-between;
     align-items: center;
     flex: 0 0 20vh;
+    position: relative;
 }
 
 .footer-left,
@@ -120,6 +136,23 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
 .ppic img {
   width: 12vh;
   height: 12vh;
+}
+
+.pflag {
+    display: flex;
+}
+
+.pflag > img {
+    height: 2rem;
+    width: 2rem;
+    margin: 10px auto;
+    display: inline;
+    border: none;
+    line-height: 3rem;
+}
+
+.pname {
+    line-height: 3rem;
 }
 
 </style>
