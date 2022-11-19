@@ -8,6 +8,10 @@ const players = ref([] as any[]);
 const matches = ref({});
 const scores = ref({});
 const scoresabers = ref({});
+const lead = ref({
+    left: 0,
+    right: 0,
+});
 
 onMounted(() => {
     const relaySocket = new WebSocket("ws://localhost:2223");
@@ -19,22 +23,27 @@ onMounted(() => {
             case 3: return onMatchUpdate(data);
             case 4: return onScoreUpdate(data);
             case 6: return onUsersUpdate(data);
-            default:
-                console.log("Unknown message", data);
-                return;
+        }
+
+        switch (data.command) {
+            case "update_lead":
+                return lead.value = {
+                    left: data.leftLead,
+                    right: data.rightLead,
+                };
         }
     };
-    relaySocket.onopen = () => console.log("Connected to Relay");
+    relaySocket.onopen = () => console.log("Relay connected");
 });
 
 function onHeartBeat(data) {
-    console.log("Heartbeat");
-    onUsersUpdate(data);
-    onMatchUpdate(data);
+    //console.log("Heartbeat");
+    onUsersUpdate(data, true);
+    onMatchUpdate(data, true);
 }
 
-function onMatchUpdate(ms) {
-    console.log("matches Update", ms);
+function onMatchUpdate(ms, heartbeat = false) {
+    if (!heartbeat) console.log("Matches Update", ms);
     matches.value = ms.matches;
 }
 
@@ -43,8 +52,8 @@ function onScoreUpdate(scs) {
     scores.value[scs.user_id] = scs;
 }
 
-function onUsersUpdate(pls) {
-    console.log("Players Update", pls);
+function onUsersUpdate(pls, heartbeat = false) {
+    if (!heartbeat) console.log("Players Update", pls);
     players.value = [...new Map(pls.players.map(item => [item["user_id"], item])).values()];
     updateScoresabers();
 }
@@ -90,8 +99,8 @@ const leftscore = computed(() => scores.value[lpid.value]?.score ?? 0);
 const rightscore = computed(() => scores.value[rpid.value]?.score ?? 0);
 const leftaccuracy = computed(() => scores.value[lpid.value]?.accuracy ?? "00.00");
 const rightaccuracy = computed(() => scores.value[rpid.value]?.accuracy ?? "00.00");
-const leftlead = computed(() => 0);
-const rightlead = computed(() => 0);
+const leftlead = computed(() => lead.value.left);
+const rightlead = computed(() => lead.value.right);
 
 </script>
 
