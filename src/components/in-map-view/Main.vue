@@ -21,7 +21,6 @@ import { ref } from 'vue'
   flex: 1;
   display: flex;
   justify-content: space-between;
-  aspect-ratio: 32 / 9;
 }
 
 .main-left,
