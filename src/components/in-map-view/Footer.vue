@@ -155,6 +155,15 @@ const rightCountryPath = computed(() => props.rightCountry ?
 .ppic img {
   width: 12vh;
   height: 12vh;
+  opacity: 0.75;
+}
+
+.footer-right .ppic img {
+    margin-right: 1rem;
+}
+
+.footer-left .ppic img {
+    margin-left: 1rem;
 }
 
 .pflag {

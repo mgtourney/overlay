@@ -72,6 +72,11 @@ const rightscoreformatted = computed(() =>
   justify-content: space-between;
 }
 
+.header-left > *,
+.header-right > * {
+  transform: translateY(1rem);
+}
+
 .lead {
   display: flex;
   flex-direction: column;

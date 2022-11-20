@@ -93,8 +93,8 @@ const rightname = computed(() => players.value?.[1]?.name ?? "Player 2");
 const mapname = computed(() => matches.value?.[0]?.selected_level?.name ?? "Map Name");
 const mapdiffname = computed(() => matches.value?.[0]?.selected_difficulty ?? "Map Difficulty");
 
-const leftmisses = computed(() => scores.value[lpid.value]?.totalMisses ?? (players.value?.[0] ? 0 : "Waiting for player 1"));
-const rightmisses = computed(() => scores.value[rpid.value]?.totalMisses ?? (players.value?.[1] ? 0 : "Waiting for player 2"));
+const leftmisses = computed(() => scores.value[lpid.value]?.totalMisses ?? (players.value?.[0] || true ? 0 : "Waiting for player 1"));
+const rightmisses = computed(() => scores.value[rpid.value]?.totalMisses ?? (players.value?.[1] || true ? 0 : "Waiting for player 2"));
 const leftscore = computed(() => scores.value[lpid.value]?.score ?? 0);
 const rightscore = computed(() => scores.value[rpid.value]?.score ?? 0);
 const leftaccuracy = computed(() => scores.value[lpid.value]?.accuracy ?? "00.00");
@@ -156,7 +156,7 @@ const rightlead = computed(() => lead.value.right);
   left: 0;
   min-width: 100%;
   min-height: 100%;
-  background-color: #1d1d1d88;
+  background-color: #121f2588;
   z-index: -1;
   backdrop-filter: blur(8px);
 }
