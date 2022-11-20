@@ -122,11 +122,10 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
 
 .footer {
     width: 100%;
-    height: 15%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex: 0 0 20vh;
+    flex: 0 0 25vh;
     position: relative;
 }
 
