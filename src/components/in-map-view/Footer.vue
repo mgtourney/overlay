@@ -32,43 +32,40 @@ const rightCountryPath = computed(() => props.rightCountry ?
     `https://flagcdn.com/h40/us.png`
 );
 
-const leftDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/76561198436848521.jpg";
-const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/76561198347791418.jpg";
-
 </script>
 
 <template>
     <div class="footer">
         <div class="footer-left">
             <div class="grid">
-                <div class="ppic"><img :src="leftpicture || leftDefaultProfilePicture" /></div>
+                <div class="ppic"><img :src="leftpicture" /></div>
 
                 <div class="pflag primary"><img :src="leftCountryPath" /></div>
-                <div class="pname primary">{{ leftname ?? "GoosyChan" }}</div>
+                <div class="pname primary">{{ leftname }}</div>
 
                 <div class="prankicon secondary"><FontAwesomeIcon icon="fa-solid fa-globe" /></div>
-                <div class="prank secondary">{{ leftrank ?? 456 }}</div>
+                <div class="prank secondary">{{ leftrank }}</div>
 
                 <div class="playerlocalrankicon secondary"><FontAwesomeIcon icon="fa-solid fa-location-dot" /></div>
-                <div class="plocalrank secondary">{{ leftlocalrank ?? 23 }}</div>
+                <div class="plocalrank secondary">{{ leftlocalrank }}</div>
             </div>
         </div>
         <div class="footer-right">
             <div class="grid">
-                <div class="pname primary">{{ rightname ?? "Checksum" }}</div>
+                <div class="pname primary">{{ rightname }}</div>
                 <div class="pflag primary"><img :src="rightCountryPath" /></div>
 
-                <div class="ppic"><img :src="rightpicture || rightDefaultProfilePicture" /></div>
+                <div class="ppic"><img :src="rightpicture" /></div>
 
-                <div class="prank secondary">{{ rightrank ?? 456 }}</div>
+                <div class="prank secondary">{{ rightrank }}</div>
                 <div class="prankicon secondary"><FontAwesomeIcon icon="fa-solid fa-globe" /></div>
 
-                <div class="plocalrank secondary">{{ rightlocalrank ?? 23 }}</div>
+                <div class="plocalrank secondary">{{ rightlocalrank }}</div>
                 <div class="playerlocalrankicon secondary"><FontAwesomeIcon icon="fa-solid fa-location-dot" /></div>
             </div>
         </div>
         <div class="footer-map primary">
-            <span>{{ mapname ?? "Extra Credit on the Extratone Test! VICTORY ROYALE!!!"}}</span><small class="secondary">{{ mapdiffname ?? "Expert+" }}</small>
+            <span>{{ mapname }}</span><small class="secondary">{{ mapdiffname }}</small>
         </div>
     </div>
 </template>
@@ -122,11 +119,10 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
 
 .footer {
     width: 100%;
-    height: 15%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex: 0 0 20vh;
+    flex: 0 0 25vh;
     position: relative;
 }
 
@@ -159,6 +155,15 @@ const rightDefaultProfilePicture = "https://cdn.scoresaber.com/avatars/765611983
 .ppic img {
   width: 12vh;
   height: 12vh;
+  opacity: 0.75;
+}
+
+.footer-right .ppic img {
+    margin-right: 1rem;
+}
+
+.footer-left .ppic img {
+    margin-left: 1rem;
 }
 
 .pflag {

@@ -1,20 +1,23 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from 'vue'
 
 const props = defineProps<{
-    leftmisses: number,
-    rightmisses: number,
-    leftscore: number,
-    rightscore: number,
-    leftaccuracy: number,
-    rightaccuracy: number,
-    leftlead: number,
-    rightlead: number,
-}>();
+  leftmisses: number
+  rightmisses: number
+  leftscore: number
+  rightscore: number
+  leftaccuracy: number
+  rightaccuracy: number
+  leftlead: number
+  rightlead: number
+}>()
 
-const leftscoreformatted = computed(() => props.leftscore?.toLocaleString?.()?.replace?.(/,/g, ' '));
-const rightscoreformatted = computed(() => props.rightscore?.toLocaleString?.()?.replace?.(/,/g, ' '));
-
+const leftscoreformatted = computed(() =>
+  props.leftscore?.toLocaleString?.()?.replace?.(/,/g, ' '),
+)
+const rightscoreformatted = computed(() =>
+  props.rightscore?.toLocaleString?.()?.replace?.(/,/g, ' '),
+)
 </script>
 
 <template>
@@ -30,14 +33,14 @@ const rightscoreformatted = computed(() => props.rightscore?.toLocaleString?.()?
         <div class="misses-text secondary">MISSES</div>
       </div>
       <div class="scores">
-        <div class="acc primary-huge">{{ leftaccuracy ?? "00.00" }}</div>
-        <div class="score secondary">{{ leftscoreformatted ?? "0" }}</div>
+        <div class="acc primary-huge">{{ leftaccuracy ?? '00.00' }}</div>
+        <div class="score secondary">{{ leftscoreformatted ?? '0' }}</div>
       </div>
     </div>
     <div class="header-right">
       <div class="scores">
-        <div class="acc primary-huge">{{ rightaccuracy ?? "00.00" }}</div>
-        <div class="score secondary">{{ rightscoreformatted ?? "0" }}</div>
+        <div class="acc primary-huge">{{ rightaccuracy ?? '00.00' }}</div>
+        <div class="score secondary">{{ rightscoreformatted ?? '0' }}</div>
       </div>
       <div class="misses">
         <div class="misses-count primary-huge">{{ rightmisses ?? 0 }}</div>
@@ -53,36 +56,11 @@ const rightscoreformatted = computed(() => props.rightscore?.toLocaleString?.()?
 </template>
 
 <style scoped>
-.lead {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 6rem;
-  height: 60%;
-  gap: 0.5rem;
-  align-self: center;
-}
-
-.lead div {
-  width: 0.75rem;
-  flex: 1;
-  border-radius: 0.5rem;
-  background-color: var(--border);
-}
-
-.lead div[active="true"] {
-  background-color: var(--white);
-}
-
-.scores {
-  flex: 1;
-}
-
 .header {
   display: flex;
   width: 100%;
   gap: 4rem;
+  flex: 0 0 20vh;
 }
 
 .header-left,
@@ -94,10 +72,45 @@ const rightscoreformatted = computed(() => props.rightscore?.toLocaleString?.()?
   justify-content: space-between;
 }
 
+.header-left > *,
+.header-right > * {
+  transform: translateY(1rem);
+}
+
+.lead {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 8rem;
+  height: 60%;
+  gap: 1rem;
+  align-self: center;
+}
+
+.lead div {
+  width: 0.75rem;
+  flex: 1;
+  border-radius: 0.5rem;
+  background-color: var(--border);
+}
+
+.lead div[active='true'] {
+  background-color: var(--white);
+}
+
+.scores {
+  flex: 1;
+}
+
 .misses,
 .scores {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  align-self: center;
+}
+
+.misses-text,
+.score {
+  margin-top: 1rem;
 }
 
 .header-left .scores,
@@ -108,7 +121,7 @@ const rightscoreformatted = computed(() => props.rightscore?.toLocaleString?.()?
 .header-left::before,
 .header-right::before {
   position: absolute;
-  content: "";
+  content: '';
   display: block;
   width: 100%;
   height: 0.5rem;
@@ -119,7 +132,7 @@ const rightscoreformatted = computed(() => props.rightscore?.toLocaleString?.()?
 .header-left::after,
 .header-right::after {
   position: absolute;
-  content: "";
+  content: '';
   display: block;
   width: 0%;
   height: 0.5rem;

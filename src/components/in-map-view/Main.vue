@@ -26,9 +26,9 @@ import { ref } from 'vue'
 .main-left,
 .main-right {
   flex: 1;
+  aspect-ratio: 16 / 9;
   outline: 6px solid var(--border);
   transform: translate(2rem);
-  height: 100%;
   border-radius: 2rem;
   background: #1d1d1d88;
 }
