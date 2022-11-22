@@ -1,5 +1,4 @@
 import { ref, Ref, computed, ComputedRef } from 'vue';
-import defaultData from './defaultData.json';
 
 export default class RelayConnection {
 
@@ -53,25 +52,25 @@ export default class RelayConnection {
 
     getUsersScoresaberIds() {
         return {
-            left: computed(() => this.disconnected.value ? defaultData.leftPlayer : this.players.value[0]?.user_id),
-            right: computed(() => this.disconnected.value ? defaultData.rightPlayer : this.players.value[1]?.user_id),
+            left: computed(() => this.disconnected.value ? "76561198436848521" : this.players.value[0]?.user_id),
+            right: computed(() => this.disconnected.value ? "76561198347791418" : this.players.value[1]?.user_id),
         }
     }
 
 
     getUsersScoresaberInfo(leftId: ComputedRef<string>, rightId: ComputedRef<string>) {
-        const leftProfilePic = computed(() => this.scoresabers.value[leftId.value]?.profilePicture ?? defaultData.leftPlayer.profile_image);
-        const rightProfilePic = computed(() => this.scoresabers.value[rightId.value]?.profilePicture ?? defaultData.rightPlayer.profile_image);
-        const leftRank = computed(() => this.scoresabers.value[leftId.value]?.rank ?? defaultData.leftPlayer.rank);
-        const rightRank = computed(() => this.scoresabers.value[rightId.value]?.rank ?? defaultData.rightPlayer.rank);
-        const leftlocalrank = computed(() => this.scoresabers.value[leftId.value]?.countryRank ?? defaultData.leftPlayer.countryrank);
-        const rightlocalrank = computed(() => this.scoresabers.value[rightId.value]?.countryRank ?? defaultData.rightPlayer.countryrank);
-        const leftCountry = computed(() => this.scoresabers.value[leftId.value]?.country?.toLowerCase?.() ?? defaultData.leftPlayer.country);
-        const rightCountry = computed(() => this.scoresabers.value[rightId.value]?.country?.toLowerCase?.() ?? defaultData.rightPlayer.country);
-        const leftname = computed(() => this.players.value?.[0]?.name ?? defaultData.leftPlayer.name);
-        const rightname = computed(() => this.players.value?.[1]?.name ?? defaultData.rightPlayer.name);
-        const mapname = computed(() => this.matches.value?.[0]?.selected_level?.name ?? defaultData.map.name);
-        const mapdiffname = computed(() => this.diffName(this.matches.value?.[0]?.selected_difficulty) ?? defaultData.map.diff);
+        const leftProfilePic = computed(() => this.scoresabers.value?.[leftId.value]?.profilePicture ?? "https://cdn.scoresaber.com/avatars/76561198436848521.jpg");
+        const rightProfilePic = computed(() => this.scoresabers.value?.[rightId.value]?.profilePicture ?? "https://cdn.scoresaber.com/avatars/76561198347791418.jpg");
+        const leftRank = computed(() => this.scoresabers.value?.[leftId.value]?.rank ?? 69);
+        const rightRank = computed(() => this.scoresabers.value?.[rightId.value]?.rank ?? 69);
+        const leftlocalrank = computed(() => this.scoresabers.value?.[leftId.value]?.countryRank ?? 42);
+        const rightlocalrank = computed(() => this.scoresabers.value?.[rightId.value]?.countryRank ?? 42);
+        const leftCountry = computed(() => this.scoresabers.value?.[leftId.value]?.country?.toLowerCase?.() ?? "de");
+        const rightCountry = computed(() => this.scoresabers.value?.[rightId.value]?.country?.toLowerCase?.() ?? "us");
+        const leftname = computed(() => this.players.value?.[0]?.name ?? "Player 1");
+        const rightname = computed(() => this.players.value?.[1]?.name ?? "Player 2");
+        const mapname = computed(() => this.matches.value?.[0]?.selected_level?.name ?? "Map Name");
+        const mapdiffname = computed(() => this.diffName(this.matches.value?.[0]?.selected_difficulty) ?? "Difficulty");
 
         return {
             leftProfilePic, rightProfilePic, leftRank, rightRank, leftlocalrank, rightlocalrank,
@@ -92,14 +91,14 @@ export default class RelayConnection {
 
 
     getScoreData(leftId: ComputedRef<string>, rightId: ComputedRef<string>) {
-        const leftmisses = computed(() => this.default(this.scores.value[leftId.value]?.totalMisses, "0"));
-        const rightmisses = computed(() => this.default(this.scores.value[rightId.value]?.totalMisses, "0"));
-        const leftscore = computed(() => this.default(this.scores.value[leftId.value]?.score, 0));
-        const rightscore = computed(() => this.default(this.scores.value[rightId.value]?.score, 0));
+        const leftmisses = computed(() => this.default(this.scores.value[leftId.value]?.totalMisses ?? 0, 0));
+        const rightmisses = computed(() => this.default(this.scores.value[rightId.value]?.totalMisses ?? 0, 0));
+        const leftscore = computed(() => this.default(this.scores.value[leftId.value]?.score ?? 0, 0));
+        const rightscore = computed(() => this.default(this.scores.value[rightId.value]?.score ?? 0, 0));
         const leftaccuracy = computed(() => this.default(((this.scores.value[leftId.value]?.accuracy ?? 0) * 100)?.toFixed?.(2), "00.00"));
         const rightaccuracy = computed(() => this.default(((this.scores.value[rightId.value]?.accuracy ?? 0) * 100)?.toFixed?.(2), "00.00"));
-        const leftlead = computed(() => this.default(this.lead.value.left, 0));
-        const rightlead = computed(() => this.default(this.lead.value.right, 0));
+        const leftlead = computed(() => this.default(this.lead.value.left ?? 0, 0));
+        const rightlead = computed(() => this.default(this.lead.value.right ?? 0, 0));
         const leftScoreShown = computed(() => this.default(true, false));
         const rightScoreShown = computed(() => this.default(true, false));
 

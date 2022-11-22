@@ -6,8 +6,8 @@ const props = defineProps<{
   rightmisses: number
   leftscore: number
   rightscore: number
-  leftaccuracy: number
-  rightaccuracy: number
+  leftaccuracy: number | string
+  rightaccuracy: number | string
   leftlead: number
   rightlead: number
   rightScoreShown: boolean
@@ -21,20 +21,20 @@ const rightscoreformatted = computed(() =>
   props.rightscore?.toLocaleString?.()?.replace?.(/,/g, ' '),
 )
 
-const accDiffA = computed(() => props.leftaccuracy - props.rightaccuracy);
+const accDiffA = computed(() => +props.leftaccuracy - +props.rightaccuracy);
 const leftProgress = computed(() => {
   if (accDiffA.value > 0) {
-      const accDiff = (1 - (1 / Math.exp(accDiffA.value / 10))) * 150;
-      return `${Math.min(100, accDiff)}%`;
+    const accDiff = (1 - (1 / Math.exp(accDiffA.value / 10))) * 150;
+    return `${Math.min(100, accDiff)}%`;
   }
   return '0%';
 });
 
-const accDiffB = computed(() => props.rightaccuracy - props.leftaccuracy);
+const accDiffB = computed(() => +props.rightaccuracy - +props.leftaccuracy);
 const rightProgress = computed(() => {
   if (accDiffB.value > 0) {
-      const accDiff = (1 - (1 / Math.exp(accDiffB.value / 10))) * 150;
-      return `${Math.min(100, accDiff)}%`;
+    const accDiff = (1 - (1 / Math.exp(accDiffB.value / 10))) * 150;
+    return `${Math.min(100, accDiff)}%`;
   }
   return '0%';
 });
@@ -50,12 +50,12 @@ const rightProgress = computed(() => {
         <div :active="leftlead >= 1"></div>
       </div>
       <div class="misses" :invisible="!leftScoreShown">
-        <div class="misses-count primary-huge">{{ leftmisses ?? 0 }}</div>
+        <div class="misses-count primary-huge">{{ leftmisses }}</div>
         <div class="misses-text secondary">MISSES</div>
       </div>
       <div class="scores" :invisible="!leftScoreShown">
-        <div class="acc primary-huge">{{ leftaccuracy ?? '00.00' }}</div>
-        <div class="score secondary">{{ leftscoreformatted ?? '0' }}</div>
+        <div class="acc primary-huge">{{ leftaccuracy }}</div>
+        <div class="score secondary">{{ leftscoreformatted }}</div>
       </div>
     </div>
     <div class="header-right" :style="{ '--right-progress': rightProgress }">
@@ -64,7 +64,7 @@ const rightProgress = computed(() => {
         <div class="score secondary">{{ rightscoreformatted }}</div>
       </div>
       <div class="misses" :invisible="!rightScoreShown">
-        <div class="misses-count primary-huge">{{ rightmisses ?? 0 }}</div>
+        <div class="misses-count primary-huge">{{ rightmisses }}</div>
         <div class="misses-text secondary">MISSES</div>
       </div>
       <div class="lead">
