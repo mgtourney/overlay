@@ -69,12 +69,19 @@ export default class RelayConnection {
         const rightCountry = computed(() => this.scoresabers.value?.[rightId.value]?.country?.toLowerCase?.() ?? "us");
         const leftname = computed(() => this.players.value?.[0]?.name ?? "Player 1");
         const rightname = computed(() => this.players.value?.[1]?.name ?? "Player 2");
-        const mapname = computed(() => this.matches.value?.[0]?.selected_level?.name ?? "Map Name");
-        const mapdiffname = computed(() => this.diffName(this.matches.value?.[0]?.selected_difficulty) ?? "Difficulty");
+        const leftPlayerShown = computed(() => this.players.value?.[0] ?? false);
+        const rightPlayerShown = computed(() => this.players.value?.[1] ?? false);
+        const mapname = computed(() => this.matches.value?.[0]?.selected_level?.name ?? (
+            leftPlayerShown.value && rightPlayerShown.value ? "Creating Match..." : "Waiting for Players..."
+        ));
+        const mapdiffname = computed(() => this.matches.value?.[0]?.selected_level?.name ? 
+            this.diffName(this.matches.value?.[0]?.selected_difficulty) ?? "" : 
+            ""
+        );
 
         return {
             leftProfilePic, rightProfilePic, leftRank, rightRank, leftlocalrank, rightlocalrank,
-            leftCountry, rightCountry, leftname, rightname, mapname, mapdiffname
+            leftCountry, rightCountry, leftname, rightname, mapname, mapdiffname, leftPlayerShown, rightPlayerShown,
         }
     }
 
@@ -85,7 +92,7 @@ export default class RelayConnection {
             case 2: return "Hard";
             case 3: return "Expert";
             case 4: return "Expert+";
-            default: return "Difficulty";
+            default: return "";
         }
     }
 

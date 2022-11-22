@@ -9,7 +9,7 @@ const relayConnection = new RelayConnection();
 const {
     lpid, rpid, leftmisses, rightmisses, leftscore, rightscore, leftaccuracy, rightaccuracy, leftlead, rightlead, 
     leftScoreShown, rightScoreShown, leftProfilePic, rightProfilePic, leftRank, rightRank, leftlocalrank, rightlocalrank,
-    leftCountry, rightCountry, leftname, rightname, mapname, mapdiffname
+    leftCountry, rightCountry, leftname, rightname, mapname, mapdiffname, leftPlayerShown, rightPlayerShown
 } = relayConnection.getData();
 
 </script>
@@ -47,6 +47,8 @@ const {
         :rightCountry="rightCountry"
         :mapname="mapname"
         :mapdiffname="mapdiffname"
+        :leftPlayerShown="leftPlayerShown"
+        :rightPlayerShown="rightPlayerShown"
     />
 </template>
 

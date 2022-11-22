@@ -21,6 +21,8 @@ const props = defineProps<{
     mapdiffname: string,
     leftCountry: string,
     rightCountry: string,
+    leftPlayerShown: boolean,
+    rightPlayerShown: boolean,
 }>();
 
 const leftCountryPath = computed(() => props.leftCountry ? 
@@ -37,7 +39,7 @@ const rightCountryPath = computed(() => props.rightCountry ?
 <template>
     <div class="footer">
         <div class="footer-left">
-            <div class="grid">
+            <div class="grid" :invisible="!leftPlayerShown">
                 <div class="ppic"><img :src="leftpicture" /></div>
 
                 <div class="pflag primary"><img :src="leftCountryPath" /></div>
@@ -51,7 +53,7 @@ const rightCountryPath = computed(() => props.rightCountry ?
             </div>
         </div>
         <div class="footer-right">
-            <div class="grid">
+            <div class="grid" :invisible="!rightPlayerShown">
                 <div class="pname primary">{{ rightname }}</div>
                 <div class="pflag primary"><img :src="rightCountryPath" /></div>
 
