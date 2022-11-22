@@ -33,6 +33,10 @@ small {
   font-size: 1.25rem;
 }
 
+[invisible="true"] {
+  visibility: hidden;
+}
+
 .secondary {
   font-size: 2rem;
   color: var(--gray);
