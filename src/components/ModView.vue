@@ -10,7 +10,7 @@ relaySocket.onopen = () => {
 
 function updateLead() {
     relaySocket.send(JSON.stringify({
-        command: "update_lead",
+        command: "update-lead",
         leftLead: 0,
         rightLead: 1,
     }));
