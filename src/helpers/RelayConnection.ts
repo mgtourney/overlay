@@ -9,6 +9,8 @@ export default class RelayConnection {
     private scoresabers: Ref<any>;
     private lead: Ref<any>;
     private disconnected: Ref<any>;
+    private leftTwitch: Ref<string>;
+    private rightTwitch: Ref<string>;
 
     constructor() {
         this.disconnected = ref(true);
@@ -20,6 +22,8 @@ export default class RelayConnection {
             left: 0,
             right: 0,
         });
+        this.leftTwitch = ref("");
+        this.rightTwitch = ref("");
 
         this.relaySocket = new WebSocket("ws://localhost:2223");
         this.relaySocket.onmessage = message => this.onmessage(message);
@@ -138,12 +142,16 @@ export default class RelayConnection {
         const scoresaberIds = this.getUsersScoresaberIds();
         const scoresaberData = this.getUsersScoresaberInfo(scoresaberIds.left, scoresaberIds.right);
         const scoreData = this.getScoreData(scoresaberIds.left, scoresaberIds.right);
+        const leftTwitch = this.leftTwitch;
+        const rightTwitch = this.rightTwitch;
 
         return {
             lpid: scoresaberIds.left,
             rpid: scoresaberIds.right,
             ...scoresaberData,
             ...scoreData,
+            leftTwitch,
+            rightTwitch,
         };
     }
 
@@ -170,6 +178,10 @@ export default class RelayConnection {
                     left: data.leftLead,
                     right: data.rightLead,
                 };
+                break;
+            case "twitch-update":
+                this.leftTwitch.value = data.leftTwitch;
+                this.rightTwitch.value = data.rightTwitch;
                 break;
         }
 

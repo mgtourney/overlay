@@ -10,8 +10,10 @@ relaySocket.onopen = () => {
     updateLead(0, 0);
 };
 
-let left = ref(0);
-let right = ref(0);
+const left = ref(0);
+const right = ref(0);
+const lefttwitch = ref("");
+const righttwitch = ref("");
 
 function updateLead(l: number, r: number) {
     left.value = l;
@@ -21,6 +23,14 @@ function updateLead(l: number, r: number) {
         command: "update-lead",
         leftLead: left.value,
         rightLead: right.value,
+    }));
+}
+
+function updateTwitch() {
+    relaySocket.send(JSON.stringify({
+        command: "update-twitch",
+        leftTwitch: lefttwitch.value,
+        rightTwitch: righttwitch.value,
     }));
 }
 
@@ -40,11 +50,15 @@ setTimeout(() => {
                 <button @click="updateLead(left + 1, right)">+</button>
                 <h1>{{ left }}</h1>
                 <button @click="updateLead(left - 1, right)">-</button>
+                <input class="ut-input" type="text" v-model="lefttwitch" placeholder="checksum__" />
+                <button class="ut-button" @click="updateTwitch()" >Update Twitch</button>
             </div>
             <div>
                 <button @click="updateLead(left, right + 1)">+</button>
                 <h1>{{ right }}</h1>
                 <button @click="updateLead(left, right - 1)">-</button>
+                <input class="ut-input" type="text" v-model="righttwitch" placeholder="goosychan" />
+                <button class="ut-button" @click="updateTwitch()" >Update Twitch</button>
             </div>
         </div>
     </div>
@@ -54,6 +68,7 @@ setTimeout(() => {
 <style scoped>
 * {
   color: black;
+  box-sizing: border-box;
 }
 
 .modroot {
@@ -83,6 +98,25 @@ button {
 
 button:hover {
     background-color: #00a1a1;
+}
+
+.ut-input {
+    margin-top: 5rem;
+    width: 8rem;
+    height: 1.5rem;
+    font-size: 1rem;
+    outline: none;
+    border: 2px solid #008b8b;
+    padding: 1rem 0.8rem;
+    color: #008b8bbd;
+}
+
+.ut-button {
+    font-size: 1rem;
+}
+
+input::placeholder {
+  color: #999;
 }
 
 </style>

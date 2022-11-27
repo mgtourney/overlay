@@ -9,7 +9,7 @@ const relayConnection = new RelayConnection();
 const {
     lpid, rpid, leftmisses, rightmisses, leftscore, rightscore, leftaccuracy, rightaccuracy, leftlead, rightlead, 
     leftScoreShown, rightScoreShown, leftProfilePic, rightProfilePic, leftRank, rightRank, leftlocalrank, rightlocalrank,
-    leftCountry, rightCountry, leftname, rightname, mapname, mapdiffname, leftPlayerShown, rightPlayerShown
+    leftCountry, rightCountry, leftname, rightname, mapname, mapdiffname, leftPlayerShown, rightPlayerShown, leftTwitch, rightTwitch,
 } = relayConnection.getData();
 
 </script>
@@ -17,7 +17,7 @@ const {
 <template>
     <div id="background">
         <video class="background play" muted autoplay loop onloadstart="this.playbackRate = 0.8">
-            <source src="videos/Ink2.mp4" type="video/mp4" />
+            <source src="../assets/videos/Ink2.mp4" type="video/mp4" />
         </video>
         <div class="blur"></div>
     </div>
@@ -33,7 +33,10 @@ const {
         :leftScoreShown="leftScoreShown"
         :rightScoreShown="rightScoreShown"
     />
-    <Main />
+    <Main 
+        :leftTwitch="leftTwitch"
+        :rightTwitch="rightTwitch"
+        />
     <Footer
         :leftrank="leftRank"
         :rightrank="rightRank"
@@ -55,28 +58,28 @@ const {
 <style scoped>
 
 .background {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  min-height: 100%;
-  z-index: -1;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
 }
 
 .blur {
-  position: fixed;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  min-height: 100%;
-  background-color: #121f2588;
-  z-index: -1;
-  backdrop-filter: blur(8px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    background-color: #121f2588;
+    z-index: -1;
+    backdrop-filter: blur(8px);
 }
 
 .play {
-  display: block;
+    display: block;
 }
 
 </style>

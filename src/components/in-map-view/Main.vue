@@ -1,13 +1,24 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
+const props = defineProps<{
+  leftTwitch: string
+  rightTwitch: string
+}>()
+
+const leftSource = computed(() => `https://player.twitch.tv/?channel=${props.leftTwitch}&height=1080&parent=127.0.0.1:5173&scrolling&width=1920`);
+const rightSource = computed(() => `https://player.twitch.tv/?channel=${props.rightTwitch}&height=1080&parent=127.0.0.1:5173&scrolling&width=1920`);
 
 </script>
 
 <template>
 	<div class="main">
-		<div class="main-left"></div>
-		<div class="main-right"></div>
+		<div class="main-left">
+      <iframe :src="leftSource" frameborder="0" :invisible="!props.leftTwitch"></iframe>
+    </div>
+		<div class="main-right">
+      <iframe :src="rightSource" frameborder="0" :invisible="!props.rightTwitch"></iframe>
+    </div>
 	</div>
 </template>
 
@@ -35,5 +46,10 @@ import { ref } from 'vue'
 
 .main-left {
   transform: translate(-2rem);
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
 }
 </style>
