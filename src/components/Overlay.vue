@@ -1,41 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import Header from './in-map-view/Header.vue'
-import Main from './in-map-view/Main.vue'
-import Footer from './in-map-view/Footer.vue'
-import RelayConnection from '../helpers/RelayConnection'
-
-const relayConnection = new RelayConnection()
-const {
-  lpid,
-  rpid,
-  leftmisses,
-  rightmisses,
-  leftscore,
-  rightscore,
-  leftaccuracy,
-  rightaccuracy,
-  leftlead,
-  rightlead,
-  leftScoreShown,
-  rightScoreShown,
-  leftProfilePic,
-  rightProfilePic,
-  leftRank,
-  rightRank,
-  leftlocalrank,
-  rightlocalrank,
-  leftCountry,
-  rightCountry,
-  leftname,
-  rightname,
-  mapname,
-  mapdiffname,
-  leftPlayerShown,
-  rightPlayerShown,
-  leftTwitch,
-  rightTwitch,
-} = relayConnection.getData()
+import InMapView from './in-map-view/View.vue'
 </script>
 
 <template>
@@ -51,35 +15,7 @@ const {
     </video>
     <div class="blur"></div>
   </div>
-  <Header
-    :leftmisses="leftmisses"
-    :rightmisses="rightmisses"
-    :leftscore="leftscore"
-    :rightscore="rightscore"
-    :leftaccuracy="leftaccuracy"
-    :rightaccuracy="rightaccuracy"
-    :leftlead="leftlead"
-    :rightlead="rightlead"
-    :leftScoreShown="leftScoreShown"
-    :rightScoreShown="rightScoreShown"
-  />
-  <Main :leftTwitch="leftTwitch" :rightTwitch="rightTwitch" />
-  <Footer
-    :leftrank="leftRank"
-    :rightrank="rightRank"
-    :leftlocalrank="leftlocalrank"
-    :rightlocalrank="rightlocalrank"
-    :leftname="leftname"
-    :rightname="rightname"
-    :leftpicture="leftProfilePic"
-    :rightpicture="rightProfilePic"
-    :leftCountry="leftCountry"
-    :rightCountry="rightCountry"
-    :mapname="mapname"
-    :mapdiffname="mapdiffname"
-    :leftPlayerShown="leftPlayerShown"
-    :rightPlayerShown="rightPlayerShown"
-  />
+  <InMapView />
 </template>
 
 <style scoped>
