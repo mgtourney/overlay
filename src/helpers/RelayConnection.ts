@@ -1,4 +1,5 @@
 import { ref, Ref, computed, ComputedRef } from 'vue';
+import { RelayDataRefs, ViewType } from "../types/general";
 
 export default class RelayConnection {
 
@@ -11,6 +12,7 @@ export default class RelayConnection {
     private disconnected: Ref<any>;
     private leftTwitch: Ref<string>;
     private rightTwitch: Ref<string>;
+    private viewMode: Ref<ViewType>;
 
     constructor() {
         this.disconnected = ref(true);
@@ -24,6 +26,7 @@ export default class RelayConnection {
         });
         this.leftTwitch = ref("");
         this.rightTwitch = ref("");
+        this.viewMode = ref("player-info-view");
 
         this.relaySocket = new WebSocket("ws://localhost:2223");
         this.relaySocket.onmessage = message => this.onmessage(message);
@@ -80,10 +83,19 @@ export default class RelayConnection {
             this.diffName(this.match.value?.selected_difficulty) ?? "" :
             ""
         );
+        const leftCountryPath = computed(() => leftCountry.value
+            ? `https://flagcdn.com/h40/${leftCountry.value.toLowerCase()}.png`
+            : `https://flagcdn.com/h40/de.png`,
+        );
+        const rightCountryPath = computed(() => rightCountry.value
+            ? `https://flagcdn.com/h40/${rightCountry.value.toLowerCase()}.png`
+            : `https://flagcdn.com/h40/us.png`,
+        );
 
         return {
             leftProfilePic, rightProfilePic, leftRank, rightRank, leftlocalrank, rightlocalrank,
             leftCountry, rightCountry, leftname, rightname, mapname, mapdiffname, leftPlayerShown, rightPlayerShown,
+            leftCountryPath, rightCountryPath,
         }
     }
 
@@ -138,10 +150,11 @@ export default class RelayConnection {
     }
 
 
-    getData(): any {
+    getData(): RelayDataRefs {
         const scoresaberIds = this.getUsersScoresaberIds();
         const scoresaberData = this.getUsersScoresaberInfo(scoresaberIds.left, scoresaberIds.right);
         const scoreData = this.getScoreData(scoresaberIds.left, scoresaberIds.right);
+        const seedInfo = this.getSeedInfo(scoresaberIds.left.value, scoresaberIds.right.value);
         const leftTwitch = this.leftTwitch;
         const rightTwitch = this.rightTwitch;
 
@@ -150,8 +163,17 @@ export default class RelayConnection {
             rpid: scoresaberIds.right,
             ...scoresaberData,
             ...scoreData,
+            ...seedInfo,
             leftTwitch,
             rightTwitch,
+            viewMode: this.viewMode,
+        };
+    }
+
+    getSeedInfo(leftPlayerId: string, rightPlayerId: string) {
+        return {
+            leftSeed: computed(() => 4),
+            rightSeed: computed(() => 6),
         };
     }
 

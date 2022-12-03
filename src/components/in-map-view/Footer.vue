@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
 
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -23,18 +22,10 @@ const props = defineProps<{
   rightCountry: string
   leftPlayerShown: boolean
   rightPlayerShown: boolean
+  leftCountryPath: string
+  rightCountryPath: string
 }>()
 
-const leftCountryPath = computed(() =>
-  props.leftCountry
-    ? `https://flagcdn.com/h40/${props.leftCountry.toLowerCase()}.png`
-    : `https://flagcdn.com/h40/de.png`,
-)
-const rightCountryPath = computed(() =>
-  props.rightCountry
-    ? `https://flagcdn.com/h40/${props.rightCountry.toLowerCase()}.png`
-    : `https://flagcdn.com/h40/us.png`,
-)
 </script>
 
 <template>

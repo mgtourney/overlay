@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import InMapView from './in-map-view/View.vue'
+import { computed } from 'vue'
+import InMapView from "./in-map-view/View.vue";
+import PlayerInfoView from "./player-info-view/View.vue";
+import RelayConnection from "../helpers/RelayConnection";
+
+const relayConnection = new RelayConnection();
+const relayData = relayConnection.getData();
+const showInMapView = computed(() => relayData.viewMode.value === "in-map-view");
+const showPlayerInfoView = computed(() => relayData.viewMode.value === "player-info-view");
+
 </script>
 
 <template>
@@ -15,7 +24,8 @@ import InMapView from './in-map-view/View.vue'
     </video>
     <div class="blur"></div>
   </div>
-  <InMapView />
+  <InMapView :relayConnection="relayConnection" v-show="showInMapView" />
+  <PlayerInfoView :relayConnection="relayConnection" v-show="showPlayerInfoView" />
 </template>
 
 <style scoped>
