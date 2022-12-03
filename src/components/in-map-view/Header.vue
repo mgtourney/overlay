@@ -21,24 +21,23 @@ const rightscoreformatted = computed(() =>
   props.rightscore?.toLocaleString?.()?.replace?.(/,/g, ' '),
 )
 
-const accDiffA = computed(() => +props.leftaccuracy - +props.rightaccuracy);
+const accDiffA = computed(() => +props.leftaccuracy - +props.rightaccuracy)
 const leftProgress = computed(() => {
   if (accDiffA.value > 0) {
-    const accDiff = (1 - (1 / Math.exp(accDiffA.value / 10))) * 150;
-    return `${Math.min(100, accDiff)}%`;
+    const accDiff = (1 - 1 / Math.exp(accDiffA.value / 10)) * 150
+    return `${Math.min(100, accDiff)}%`
   }
-  return '0%';
-});
+  return '0%'
+})
 
-const accDiffB = computed(() => +props.rightaccuracy - +props.leftaccuracy);
+const accDiffB = computed(() => +props.rightaccuracy - +props.leftaccuracy)
 const rightProgress = computed(() => {
   if (accDiffB.value > 0) {
-    const accDiff = (1 - (1 / Math.exp(accDiffB.value / 10))) * 150;
-    return `${Math.min(100, accDiff)}%`;
+    const accDiff = (1 - 1 / Math.exp(accDiffB.value / 10)) * 150
+    return `${Math.min(100, accDiff)}%`
   }
-  return '0%';
-});
-
+  return '0%'
+})
 </script>
 
 <template>

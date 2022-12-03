@@ -76,8 +76,8 @@ export default class RelayConnection {
         const mapname = computed(() => this.match.value?.selected_level?.name ?? (
             leftPlayerShown.value && rightPlayerShown.value ? "Creating Match..." : "Waiting for Players..."
         ));
-        const mapdiffname = computed(() => this.match.value?.selected_level?.name ? 
-            this.diffName(this.match.value?.selected_difficulty) ?? "" : 
+        const mapdiffname = computed(() => this.match.value?.selected_level?.name ?
+            this.diffName(this.match.value?.selected_difficulty) ?? "" :
             ""
         );
 
@@ -88,7 +88,7 @@ export default class RelayConnection {
     }
 
     diffName(diff: number) {
-        switch(diff) {
+        switch (diff) {
             case 0: return "Easy";
             case 1: return "Normal";
             case 2: return "Hard";
@@ -159,14 +159,14 @@ export default class RelayConnection {
     onmessage(message: MessageEvent<any>) {
         const data = JSON.parse(message.data);
         switch (data.type) {
-            case "on-connection": 
+            case "on-connection":
                 console.log("Relay connected to TA");
                 break;
             case "on-scoresaber-update":
                 console.log("Received scoresaber update", data.scoresabers);
                 this.scoresabers.value = data.scoresabers;
                 break;
-            case "game-state-update": 
+            case "game-state-update":
                 this.players.value = data.players;
                 this.match.value = data.match;
                 break;
