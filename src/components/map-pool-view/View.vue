@@ -1,9 +1,14 @@
 <script setup lang="ts">
 import RelayConnection from "../../helpers/RelayConnection";
+import { PoolMap } from "../../types/general";
 import MPVMap from "./Map.vue";
 
 const props = defineProps<{
   relayConnection: RelayConnection;
+  group1Maps: PoolMap[];
+  group2Maps: PoolMap[];
+  group3Maps: PoolMap[];
+  name: string;
 }>();
 
 const relayData = props.relayConnection.getData();
@@ -12,25 +17,25 @@ const relayData = props.relayConnection.getData();
 <template>
   <div class="map-pool-view-root">
     <div>
-      <div class="mpv-header primary">{{ relayData.mapPool.value.poolName }}</div>
+      <div class="mpv-header primary">{{ name }}</div>
       <div class="mpv-body grid">
         <div class="mpv-title primary">Balanced</div>
         <div class="mpv-title primary">Tech</div>
         <div class="mpv-title primary">Speed</div>
         <MPVMap
-          v-for="map in relayData.mapPool.value.poolMapsGroup1"
+          v-for="map in group1Maps"
           :map="map"
           :key="map.hash"
           :relayConnection="relayConnection"
         />
         <MPVMap
-          v-for="map in relayData.mapPool.value.poolMapsGroup2"
+          v-for="map in group2Maps"
           :map="map"
           :key="map.hash"
           :relayConnection="relayConnection"
         />
         <MPVMap
-          v-for="map in relayData.mapPool.value.poolMapsGroup3"
+          v-for="map in group3Maps"
           :map="map"
           :key="map.hash"
           :relayConnection="relayConnection"

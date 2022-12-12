@@ -7,9 +7,13 @@ export interface PoolMap {
 
 export interface MapPoolInfo {
     poolName: string
+    warmupPoolName: string
     poolMapsGroup1: PoolMap[]
     poolMapsGroup2: PoolMap[]
     poolMapsGroup3: PoolMap[]
+    poolWarmupMapsGroup1: PoolMap[]
+    poolWarmupMapsGroup2: PoolMap[]
+    poolWarmupMapsGroup3: PoolMap[]
 }
 
 export interface RelayDataRefs {
@@ -50,4 +54,4 @@ export interface RelayDataRefs {
     mapPool: ComputedRef<MapPoolInfo>
 }
 
-export type ViewType = "in-map-view" | "player-info-view" | "map-pool-view"
+export type ViewType = "in-map-view" | "player-info-view" | "map-pool-view" | "warmups-pool-view"

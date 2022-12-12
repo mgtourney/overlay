@@ -1,16 +1,21 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed } from "vue";
 import InMapView from "./in-map-view/View.vue";
 import PlayerInfoView from "./player-info-view/View.vue";
 import RelayConnection from "../helpers/RelayConnection";
 import MapPoolView from "./map-pool-view/View.vue";
+import WarmupsPoolView from "./warmups-pool-view/View.vue";
 
 const relayConnection = new RelayConnection();
 const relayData = relayConnection.getData();
 const showInMapView = computed(() => relayData.viewMode.value === "in-map-view");
-const showPlayerInfoView = computed(() => relayData.viewMode.value === "player-info-view");
+const showPlayerInfoView = computed(
+  () => relayData.viewMode.value === "player-info-view"
+);
 const showMapPoolView = computed(() => relayData.viewMode.value === "map-pool-view");
-
+const showWarumupsPoolView = computed(
+  () => relayData.viewMode.value === "warmups-pool-view"
+);
 </script>
 
 <template>
@@ -28,7 +33,15 @@ const showMapPoolView = computed(() => relayData.viewMode.value === "map-pool-vi
   </div>
   <InMapView :relayConnection="relayConnection" v-show="showInMapView" />
   <PlayerInfoView :relayConnection="relayConnection" v-show="showPlayerInfoView" />
-  <MapPoolView :relayConnection="relayConnection" v-show="showMapPoolView" />
+  <MapPoolView
+    :relayConnection="relayConnection"
+    :name="relayData.mapPool.value.poolName"
+    v-show="showMapPoolView"
+    :group1Maps="relayData.mapPool.value.poolMapsGroup1"
+    :group2Maps="relayData.mapPool.value.poolMapsGroup2"
+    :group3Maps="relayData.mapPool.value.poolMapsGroup3"
+  />
+  <WarmupsPoolView :relayConnection="relayConnection" v-show="showWarumupsPoolView" />
 </template>
 
 <style scoped>

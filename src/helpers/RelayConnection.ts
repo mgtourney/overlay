@@ -28,7 +28,7 @@ export default class RelayConnection {
         });
         this.leftTwitch = ref("");
         this.rightTwitch = ref("");
-        this.viewMode = ref("map-pool-view");
+        this.viewMode = ref("warmups-pool-view");
         this.currentMapPool = ref("1");
 
         this.relaySocket = new WebSocket("ws://localhost:2223");
@@ -180,6 +180,7 @@ export default class RelayConnection {
             return {
                 "1": {
                     poolName: "Map Pool 1",
+                    warmupPoolName: "Warmup Pool 1",
                     poolMapsGroup1: [
                         { name: "Gakky", hash: "c288a19fe48fa676e7be8846b6ffb3021fb273c7" },
                         { name: "Gakky", hash: "B70AEEF2EE915CED48593422931E8BA2A1F4E973" },
@@ -195,6 +196,15 @@ export default class RelayConnection {
                         { name: "Gakky", hash: "D7CB32F23041DEC272DE3DA0AC141DD8F91478CA" },
                         { name: "Gakky", hash: "BBABE0DA40CE8F54C666DB99F58F8D03D5F7CEC7" },
                     ],
+                    poolWarmupMapsGroup1: [
+                        { name: "Gakky", hash: "C6B7136536EF5647374198769B3211B2B2E4EE17" },
+                    ],
+                    poolWarmupMapsGroup2: [
+                        { name: "Gakky", hash: "C6B7136536EF5647374198769B3211B2B2E4EE17" },
+                    ],
+                    poolWarmupMapsGroup3: [
+                        { name: "Gakky", hash: "C6B7136536EF5647374198769B3211B2B2E4EE17" },
+                    ]
                 }
             }[this.currentMapPool.value] as MapPoolInfo;
         });
