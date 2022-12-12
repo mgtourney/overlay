@@ -1,5 +1,6 @@
+import { MapPoolInfo } from './../types/general.d';
 import { ref, Ref, computed, ComputedRef } from 'vue';
-import { RelayDataRefs, ViewType } from "../types/general";
+import { RelayDataRefs, ViewType, PoolMap } from "../types/general";
 
 export default class RelayConnection {
 
@@ -13,6 +14,7 @@ export default class RelayConnection {
     private leftTwitch: Ref<string>;
     private rightTwitch: Ref<string>;
     private viewMode: Ref<ViewType>;
+    private currentMapPool: Ref<string>;
 
     constructor() {
         this.disconnected = ref(true);
@@ -26,7 +28,8 @@ export default class RelayConnection {
         });
         this.leftTwitch = ref("");
         this.rightTwitch = ref("");
-        this.viewMode = ref("player-info-view");
+        this.viewMode = ref("map-pool-view");
+        this.currentMapPool = ref("1");
 
         this.relaySocket = new WebSocket("ws://localhost:2223");
         this.relaySocket.onmessage = message => this.onmessage(message);
@@ -155,6 +158,7 @@ export default class RelayConnection {
         const scoresaberData = this.getUsersScoresaberInfo(scoresaberIds.left, scoresaberIds.right);
         const scoreData = this.getScoreData(scoresaberIds.left, scoresaberIds.right);
         const seedInfo = this.getSeedInfo(scoresaberIds.left.value, scoresaberIds.right.value);
+        const mapPoolInfo = this.getMapPoolInfo();
         const leftTwitch = this.leftTwitch;
         const rightTwitch = this.rightTwitch;
 
@@ -166,8 +170,34 @@ export default class RelayConnection {
             ...seedInfo,
             leftTwitch,
             rightTwitch,
+            mapPool: mapPoolInfo,
             viewMode: this.viewMode,
         };
+    }
+
+    getMapPoolInfo() : ComputedRef<MapPoolInfo> {
+        return computed(() => {
+            return {
+                "1": {
+                    poolName: "Map Pool 1",
+                    poolMapsGroup1: [
+                        { name: "Gakky", hash: "c288a19fe48fa676e7be8846b6ffb3021fb273c7" },
+                        { name: "Gakky", hash: "B70AEEF2EE915CED48593422931E8BA2A1F4E973" },
+                        { name: "Gakky", hash: "12FFB213E09E866172AABA442843BB3116C07316" },
+                    ],
+                    poolMapsGroup2: [
+                        { name: "Gakky", hash: "1B9278797FA6D85D0201D1A261101F8CB9AC7DDE" },
+                        { name: "Gakky", hash: "6612DFE7533EA5426ADFA378EEC4ED19E24233EB" },
+                        { name: "Gakky", hash: "3D0561C0E4B18AA7A5C240FA2AC0C2052318A8D2" },
+                    ],
+                    poolMapsGroup3: [
+                        { name: "Gakky", hash: "C6B7136536EF5647374198769B3211B2B2E4EE17" },
+                        { name: "Gakky", hash: "D7CB32F23041DEC272DE3DA0AC141DD8F91478CA" },
+                        { name: "Gakky", hash: "BBABE0DA40CE8F54C666DB99F58F8D03D5F7CEC7" },
+                    ],
+                }
+            }[this.currentMapPool.value] as MapPoolInfo;
+        });
     }
 
     getSeedInfo(leftPlayerId: string, rightPlayerId: string) {

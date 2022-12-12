@@ -3,11 +3,13 @@ import { computed } from 'vue'
 import InMapView from "./in-map-view/View.vue";
 import PlayerInfoView from "./player-info-view/View.vue";
 import RelayConnection from "../helpers/RelayConnection";
+import MapPoolView from "./map-pool-view/View.vue";
 
 const relayConnection = new RelayConnection();
 const relayData = relayConnection.getData();
 const showInMapView = computed(() => relayData.viewMode.value === "in-map-view");
 const showPlayerInfoView = computed(() => relayData.viewMode.value === "player-info-view");
+const showMapPoolView = computed(() => relayData.viewMode.value === "map-pool-view");
 
 </script>
 
@@ -26,6 +28,7 @@ const showPlayerInfoView = computed(() => relayData.viewMode.value === "player-i
   </div>
   <InMapView :relayConnection="relayConnection" v-show="showInMapView" />
   <PlayerInfoView :relayConnection="relayConnection" v-show="showPlayerInfoView" />
+  <MapPoolView :relayConnection="relayConnection" v-show="showMapPoolView" />
 </template>
 
 <style scoped>

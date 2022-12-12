@@ -1,5 +1,17 @@
 import { Ref, ComputedRef } from 'vue';
 
+export interface PoolMap {
+    name: string;
+    hash: string;
+}
+
+export interface MapPoolInfo {
+    poolName: string
+    poolMapsGroup1: PoolMap[]
+    poolMapsGroup2: PoolMap[]
+    poolMapsGroup3: PoolMap[]
+}
+
 export interface RelayDataRefs {
     lpid: ComputedRef<string>
     rpid: ComputedRef<string>
@@ -35,6 +47,7 @@ export interface RelayDataRefs {
     rightCountryPath: ComputedRef<string>
     leftSeed: ComputedRef<number>
     rightSeed: ComputedRef<number>
+    mapPool: ComputedRef<MapPoolInfo>
 }
 
-export type ViewType = "in-map-view" | "player-info-view"
+export type ViewType = "in-map-view" | "player-info-view" | "map-pool-view"
