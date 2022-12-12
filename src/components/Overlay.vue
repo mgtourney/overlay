@@ -5,6 +5,7 @@ import PlayerInfoView from "./player-info-view/View.vue";
 import RelayConnection from "../helpers/RelayConnection";
 import MapPoolView from "./map-pool-view/View.vue";
 import WarmupsPoolView from "./warmups-pool-view/View.vue";
+import PlayerMapInfoView from "./player-map-view/View.vue";
 
 const relayConnection = new RelayConnection();
 const relayData = relayConnection.getData();
@@ -15,6 +16,9 @@ const showPlayerInfoView = computed(
 const showMapPoolView = computed(() => relayData.viewMode.value === "map-pool-view");
 const showWarumupsPoolView = computed(
   () => relayData.viewMode.value === "warmups-pool-view"
+);
+const showPlayerMapInfoView = computed(
+  () => relayData.viewMode.value === "player-map-view"
 );
 </script>
 
@@ -42,6 +46,7 @@ const showWarumupsPoolView = computed(
     :group3Maps="relayData.mapPool.value.poolMapsGroup3"
   />
   <WarmupsPoolView :relayConnection="relayConnection" v-show="showWarumupsPoolView" />
+  <PlayerMapInfoView :relayConnection="relayConnection" v-show="showPlayerMapInfoView" />
 </template>
 
 <style scoped>

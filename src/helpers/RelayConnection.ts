@@ -28,7 +28,7 @@ export default class RelayConnection {
         });
         this.leftTwitch = ref("");
         this.rightTwitch = ref("");
-        this.viewMode = ref("warmups-pool-view");
+        this.viewMode = ref("player-map-view");
         this.currentMapPool = ref("1");
 
         this.relaySocket = new WebSocket("ws://localhost:2223");

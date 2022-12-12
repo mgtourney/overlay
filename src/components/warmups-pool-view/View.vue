@@ -21,7 +21,4 @@ const relayData = props.relayConnection.getData();
   </div>
 </template>
 
-<style scoped>
-.warmups-pool-view {
-}
-</style>
+<style scoped></style>
