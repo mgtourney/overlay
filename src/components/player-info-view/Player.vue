@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import RelayConnection from "../../helpers/RelayConnection";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faGlobe, faLocationDot } from "@fortawesome/free-solid-svg-icons";

@@ -2,10 +2,13 @@
 import Header from './Header.vue'
 import Main from './Main.vue'
 import Footer from './Footer.vue'
-import RelayConnection from '../../helpers/RelayConnection'
+import RelayConnection from "../../helpers/RelayConnection";
 
-const relayConnection = new RelayConnection()
-const relayData = relayConnection.getData()
+const props = defineProps<{
+  relayConnection: RelayConnection;
+}>();
+
+const relayData = props.relayConnection.getData();
 </script>
 
 <template>
