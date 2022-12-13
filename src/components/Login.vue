@@ -4,10 +4,19 @@ const { loginWithRedirect } = useAuth0()
 </script>
 
 <template>
-  <button @click="() => loginWithRedirect()">Log in</button>
+  <div class="root">
+    <button @click="() => loginWithRedirect()">Log in</button>
+  </div>
 </template>
 
 <style scoped>
+
+.root {
+  width: 100vw;
+  height: 100vh;
+  background-color: #2e2f30;
+}
+
 button {
   display: block;
   width: 8rem;
