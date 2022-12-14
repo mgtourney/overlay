@@ -31,15 +31,38 @@ function updateLead(l: number, r: number) {
 /**
  * For some reason, the url hash gets lost when the user is redirected back to the app after logging in.
  */
-setTimeout(() => window.location.hash = "#modview", 1000);
+setTimeout(() => (window.location.hash = "#modview"), 1000);
 
-
-const TRANSITIONS: Record<ViewType, ViewType[]> = {
-  "player-info-view": ["map-pool-view", "warmups-pool-view"],
-  "warmups-pool-view": ["player-info-view", "warmups-pool-view", "player-map-view"],
-  "map-pool-view": ["warmups-pool-view", "player-map-view", "player-info-view"],
-  "player-map-view": ["in-map-view", "map-pool-view", "warmups-pool-view"],
-  "in-map-view": ["map-pool-view", "player-map-view"],
+const TRANSITIONS: Record<ViewType, {
+  left?: ViewType;
+  middle?: ViewType;
+  right?: ViewType;
+}> = {
+  "player-info-view": {
+    left: "map-pool-view",
+    middle: undefined,
+    right: "warmups-pool-view"
+  },
+  "warmups-pool-view": {
+    left: "player-info-view",
+    middle: "warmups-pool-view",
+    right: "player-map-view"
+  },
+  "map-pool-view": {
+    left: "warmups-pool-view",
+    middle: "player-map-view",
+    right: "player-info-view"
+  },
+  "player-map-view": {
+    left: "map-pool-view",
+    middle: "in-map-view",
+    right: "warmups-pool-view"
+  },
+  "in-map-view": {
+    left: "map-pool-view",
+    middle: undefined,
+    right: "player-map-view"
+  },
 };
 const VIEW_TYPE_TITLES = {
   "player-info-view": "Players Info",
@@ -47,12 +70,21 @@ const VIEW_TYPE_TITLES = {
   "map-pool-view": "Map Pool",
   "player-map-view": "Players & Map Info",
   "in-map-view": "1v1 Stream",
-}
+};
+const lastView = ref<ViewType>("in-map-view");
 const currentView = ref<ViewType>("player-map-view");
-const selectedView = ref<ViewType>("in-map-view");
+const nextViews = ref<{
+  left?: ViewType;
+  middle?: ViewType;
+  right?: ViewType;
+}>(TRANSITIONS[currentView.value]);
+const selectedView = ref<ViewType>(currentView.value);
 
-
-
+function onSwitch() {
+  lastView.value = currentView.value;
+  currentView.value = selectedView.value;
+  nextViews.value = TRANSITIONS[currentView.value];
+}
 </script>
 
 <template>
@@ -61,43 +93,68 @@ const selectedView = ref<ViewType>("in-map-view");
       <div class="view-selector-wrapper">
         <div class="view-selector">
           <div class="last-view">
-            <div class="view">
-              <ViewSelector :relayConnection="relayConnection" :view="'map-pool-view'" />
+            <div
+              class="view middle-view"
+              :selected="selectedView === lastView"
+              @click="() => (selectedView = lastView)"
+            >
+              <ViewSelector :relayConnection="relayConnection" :view="lastView" />
             </div>
           </div>
           <div class="current-view">
-            <div class="view">
-              <ViewSelector :relayConnection="relayConnection" :view="'player-map-view'" />
+            <div
+              class="view middle-view"
+              :selected="selectedView === currentView"
+              @click="() => (selectedView = currentView)"
+            >
+              <ViewSelector
+                :relayConnection="relayConnection"
+                :view="currentView"
+              />
             </div>
           </div>
           <div class="next-views">
-            <div class="view">
-              <ViewSelector :relayConnection="relayConnection" :view="'map-pool-view'" />
+            <div
+              class="view left-view"
+              v-if="nextViews.left"
+              :selected="selectedView === nextViews.left"
+              @click="() => (selectedView = nextViews.left as ViewType)"
+            >
+              <ViewSelector :relayConnection="relayConnection" :view="(nextViews.left as ViewType)" />
             </div>
-            <div class="view">
-              <ViewSelector :relayConnection="relayConnection" :view="'in-map-view'" />
+            <div
+              class="view middle-view"
+              v-if="nextViews.middle"
+              :selected="selectedView === nextViews.middle"
+              @click="() => (selectedView = nextViews.middle as ViewType)"
+            >
+              <ViewSelector :relayConnection="relayConnection" :view="(nextViews.middle as ViewType)" />
             </div>
-            <div class="view">
-              <ViewSelector :relayConnection="relayConnection" :view="'warmups-pool-view'" />
+            <div
+              class="view right-view"
+              v-if="nextViews.right"
+              :selected="selectedView === nextViews.right"
+              @click="() => (selectedView = nextViews.right as ViewType)"
+            >
+              <ViewSelector
+                :relayConnection="relayConnection"
+                :view="(nextViews.right as ViewType)"
+              />
             </div>
           </div>
         </div>
       </div>
       <div class="config-wrapper">
         <div class="edit-config" v-if="selectedView === currentView">
-          <h1>Edit</h1>
-          <h2>{{ VIEW_TYPE_TITLES[currentView] }}</h2>
-          <div>
-          
-          </div>
+          <h2>Edit</h2>
+          <h1>{{ VIEW_TYPE_TITLES[currentView] }}</h1>
+          <div></div>
         </div>
         <div class="switch-config" v-else>
-          <h1>Switch To</h1>
-          <h2>{{ VIEW_TYPE_TITLES[selectedView] }}</h2>
-          <div>
-          
-          </div>
-          <button>Switch</button>
+          <h2>Switch To</h2>
+          <h1>{{ VIEW_TYPE_TITLES[selectedView] }}</h1>
+          <div></div>
+          <button @click="onSwitch">Switch</button>
         </div>
       </div>
     </section>
@@ -111,6 +168,7 @@ const selectedView = ref<ViewType>("in-map-view");
 <style scoped>
 * {
   color: white;
+  box-sizing: border-box;
 }
 
 .modroot {
@@ -122,25 +180,85 @@ const selectedView = ref<ViewType>("in-map-view");
   text-transform: uppercase;
 }
 
-.view {
-  position: absolute;
-  width: 100vw;
-  height: calc(100vw / 1.7778);
-  scale: 0.15;
-  overflow: hidden;
-  user-select: none;
+.view-selector-wrapper {
+  width: 100%;
+  height: 60%;
 }
 
-.last-view .view:hover,
-.next-views .view:hover {
-  scale: 0.16;
+.view-selector {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.view-selector > * {
+  width: 100%;
+  position: relative;
+  flex: 0 0 calc(100vh * var(--scale));
+}
+
+.last-view,
+.next-views {
+  --scale: 0.12;
+}
+
+.current-view {
+  --scale: 0.15;
+}
+
+.view {
+  --aspect-ratio: 16 / 9;
+  --scale: 0.12;
+  position: absolute;
+  height: 100vh;
+  width: calc(100vh * var(--aspect-ratio));
+  overflow: hidden;
+  user-select: none;
+  border: 4px solid #4d555f;
+  transition: all 0.1s ease-in-out;
+  scale: var(--scale);
+  --start: calc(25vw / var(--scale));
+  --view-translate: calc(var(--start) - 50%);
+  transform: translate(var(--view-translate));
+  transform-origin: top left;
   cursor: pointer;
-  filter: drop-shadow(0px 0px 1rem rgba(132, 188, 255, 0.25));
+}
+
+.current-view .view {
+  border-color: #760000;
+  border-width: 2rem;
+}
+
+.view[selected="true"] {
+  border-width: 2.5rem;
+}
+
+.current-view .view[selected="true"] {
+  border-width: 3rem;
+}
+
+.left-view {
+  --view-translate: calc(var(--start) - 175%);
+}
+
+.right-view {
+  --view-translate: calc(var(--start) + 75%);
+}
+
+.current-view .view {
+  --scale: 0.15;
+}
+
+.view:not(.current-view .view):hover {
+  border: 2.5rem solid #4d555f;
 }
 
 button {
   background-color: transparent;
-  border: 1px solid #4D555F;
+  border: 1px solid #4d555f;
   padding: 1rem 2rem;
   cursor: pointer;
   text-transform: uppercase;
@@ -151,36 +269,6 @@ button:hover {
   background-color: #393b3c;
 }
 
-.last-view .view,
-.current-view .view {
-  right: -50%;
-}
-
-.next-views .view:nth-child(1) {
-  scale: 0.12;
-  right: -80%;
-}
-
-.next-views .view:nth-child(2) {
-  scale: 0.12;
-  right: -50%;
-}
-
-.next-views .view:nth-child(3) {
-  scale: 0.12;
-  right: -20%;
-}
-
-.next-views .view:hover {
-  scale: 0.13;
-}
-
-.view {
-  transition: scale 0.1s ease-in-out;
-  top: -150%;
-  border: 3px solid #4D555F;
-}
-
 section {
   flex: 1;
   justify-content: center;
@@ -188,48 +276,35 @@ section {
 }
 
 .modroot > section:nth-child(1) {
-  border-right: 1px solid #4D555F;
+  border-right: 1px solid #4d555f;
   flex: 1;
 }
 
 .config-wrapper {
-  border-top: 1px solid #4D555F;
+  border-top: 1px solid #4d555f;
 }
 
-.config-wrapper h1,
+.config-wrapper h1 {
+  font-size: 2rem;
+  margin-top: 0.5rem;
+}
+
 .config-wrapper h2 {
+  font-size: 1.5rem;
+  color: #768ca6;
+  margin-bottom: 0;
 }
 
 .modroot > section:nth-child(2) {
   display: flex;
 }
 
-.view-selector-wrapper {
-  width: 100%;
-  height: 60%;
-}
-
 iframe {
+  --scale: calc(16 / 9);
   position: absolute;
   width: 100vw;
-  height: calc(100vw / 1.7778);
+  height: calc(100vw / var(--scale));
   scale: 0.4;
-  border: 3px solid #4D555F;
+  border: 3px solid #4d555f;
 }
-
-.view-selector {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-.view-selector > * {
-  flex: 1;
-  width: 100%;
-  position: relative;
-}
-
 </style>
