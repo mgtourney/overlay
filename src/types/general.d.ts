@@ -55,4 +55,12 @@ export interface RelayDataRefs {
     mapPoolMap: ComputedRef<PoolMap>
 }
 
-export type ViewType = "in-map-view" | "player-info-view" | "map-pool-view" | "warmups-pool-view" | "player-map-view"
+export type ElementType = "input" | "select" | "checkbox" | "button";
+export interface ModEditorConfig {
+    elementType: ElementType
+    elementId: string
+}
+
+export type ViewType = 
+    "in-map-view" | "player-info-view" | "map-pool-view" | "warmups-pool-view" | 
+    "player-map-view" | "starting-view" | "ending-view"

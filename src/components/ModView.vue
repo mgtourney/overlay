@@ -4,6 +4,7 @@ import { useAuth0 } from "@auth0/auth0-vue";
 import { ref } from "vue";
 import RelayConnection from "../helpers/RelayConnection";
 import ViewSelector from "./ViewSelector.vue";
+import SwitchEdit from "./mod-view/SwitchEdit.vue";
 import { ViewType } from "../types/general";
 
 const { user, isAuthenticated } = useAuth0();
@@ -41,6 +42,11 @@ const TRANSITIONS: Record<
     right?: ViewType;
   }
 > = {
+  "starting-view": {
+    left: undefined,
+    middle: "player-info-view",
+    right: undefined,
+  },
   "player-info-view": {
     left: "map-pool-view",
     middle: undefined,
@@ -66,22 +72,30 @@ const TRANSITIONS: Record<
     middle: undefined,
     right: "player-map-view",
   },
+  "ending-view": {
+    left: undefined,
+    middle: undefined,
+    right: undefined,
+  },
 };
 const VIEW_TYPE_TITLES: Record<ViewType, string> = {
+  "starting-view": "Starting",
   "player-info-view": "Players Info",
   "warmups-pool-view": "Warmup Pool",
   "map-pool-view": "Map Pool",
   "player-map-view": "Players & Map Info",
   "in-map-view": "1v1 Stream",
+  "ending-view": "Ending",
 };
-const lastView = ref<ViewType>("in-map-view");
-const currentView = ref<ViewType>("player-map-view");
+const lastView = ref<ViewType | undefined>(undefined);
+const currentView = ref<ViewType>("starting-view");
 const nextViews = ref<{
   left?: ViewType;
   middle?: ViewType;
   right?: ViewType;
 }>(TRANSITIONS[currentView.value]);
 const selectedView = ref<ViewType>(currentView.value);
+const switchEditElement = ref<typeof SwitchEdit | null>(null);
 
 function onSwitch() {
   lastView.value = currentView.value;
@@ -104,10 +118,11 @@ function onSwitch() {
           <div class="last-view">
             <div
               class="view middle-view"
+              v-if="lastView != null"
               :selected="selectedView === lastView"
-              @click="() => (selectedView = lastView)"
+              @click="() => (selectedView = lastView as ViewType)"
             >
-              <ViewSelector :relayConnection="relayConnection" :view="lastView" />
+              <ViewSelector :relayConnection="relayConnection" :view="(lastView as ViewType)" />
             </div>
           </div>
           <div class="current-view">
@@ -165,8 +180,10 @@ function onSwitch() {
         <div class="switch-config" v-else>
           <h2>Switch To</h2>
           <h1>{{ VIEW_TYPE_TITLES[selectedView] }}</h1>
-          <div></div>
-          <button @click="onSwitch">Switch</button>
+          <div>
+            <SwitchEdit :relayConnection="relayConnection" :selected="selectedView" ref="switchEditElement" />
+          </div>
+          <button @click="onSwitch" v-if="switchEditElement?.canSwitch">Switch</button>
         </div>
       </div>
     </section>
@@ -204,6 +221,12 @@ function onSwitch() {
   align-items: center;
   width: 100%;
   height: 100%;
+}
+
+[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 .view-selector > * {
@@ -275,6 +298,7 @@ button {
   cursor: pointer;
   text-transform: uppercase;
   font-size: large;
+  margin-top: 1.5rem;
 }
 
 button:hover {

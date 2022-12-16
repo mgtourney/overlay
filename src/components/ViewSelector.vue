@@ -6,6 +6,7 @@ import RelayConnection from "../helpers/RelayConnection";
 import MapPoolView from "./map-pool-view/View.vue";
 import WarmupsPoolView from "./warmups-pool-view/View.vue";
 import PlayerMapInfoView from "./player-map-view/View.vue";
+import StartingEndingView from "./starting-ending-view/View.vue";
 import { ViewType } from "../types/general";
 
 const props = defineProps<{
@@ -19,6 +20,8 @@ const showPlayerInfoView = computed(() => props.view === "player-info-view");
 const showMapPoolView = computed(() => props.view === "map-pool-view");
 const showWarumupsPoolView = computed(() => props.view === "warmups-pool-view");
 const showPlayerMapInfoView = computed(() => props.view === "player-map-view");
+const showStartingView = computed(() => props.view === "starting-view");
+const showEndingView = computed(() => props.view === "ending-view");
 </script>
 
 <template>
@@ -46,6 +49,8 @@ const showPlayerMapInfoView = computed(() => props.view === "player-map-view");
   />
   <WarmupsPoolView :relayConnection="relayConnection" v-show="showWarumupsPoolView" />
   <PlayerMapInfoView :relayConnection="relayConnection" v-show="showPlayerMapInfoView" />
+  <StartingEndingView :starting="true" v-show="showStartingView"  />
+  <StartingEndingView :starting="false" v-show="showEndingView"  />
 </template>
 
 <style scoped>
