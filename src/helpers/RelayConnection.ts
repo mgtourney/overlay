@@ -159,6 +159,7 @@ export default class RelayConnection {
         const scoreData = this.getScoreData(scoresaberIds.left, scoresaberIds.right);
         const seedInfo = this.getSeedInfo(scoresaberIds.left.value, scoresaberIds.right.value);
         const mapPoolInfo = this.getMapPoolInfo();
+        const mapPoolMap = this.getMapPoolMap();
         const leftTwitch = this.leftTwitch;
         const rightTwitch = this.rightTwitch;
 
@@ -171,11 +172,21 @@ export default class RelayConnection {
             leftTwitch,
             rightTwitch,
             mapPool: mapPoolInfo,
+            mapPoolMap: mapPoolMap,
             viewMode: this.viewMode,
         };
     }
 
-    getMapPoolInfo() : ComputedRef<MapPoolInfo> {
+    getMapPoolMap(): ComputedRef<PoolMap> {
+        return computed(() => {
+            return {
+                hash: "c288a19fe48fa676e7be8846b6ffb3021fb273c7",
+                name: "Gakky",
+            }
+        });
+    }
+
+    getMapPoolInfo(): ComputedRef<MapPoolInfo> {
         return computed(() => {
             return {
                 "1": {

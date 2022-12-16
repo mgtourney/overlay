@@ -64,7 +64,7 @@ const TRANSITIONS: Record<ViewType, {
     right: "player-map-view"
   },
 };
-const VIEW_TYPE_TITLES = {
+const VIEW_TYPE_TITLES: Record<ViewType, string> = {
   "player-info-view": "Players Info",
   "warmups-pool-view": "Warmup Pool",
   "map-pool-view": "Map Pool",

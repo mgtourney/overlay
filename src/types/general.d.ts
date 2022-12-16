@@ -52,6 +52,7 @@ export interface RelayDataRefs {
     leftSeed: ComputedRef<number>
     rightSeed: ComputedRef<number>
     mapPool: ComputedRef<MapPoolInfo>
+    mapPoolMap: ComputedRef<PoolMap>
 }
 
 export type ViewType = "in-map-view" | "player-info-view" | "map-pool-view" | "warmups-pool-view" | "player-map-view"
