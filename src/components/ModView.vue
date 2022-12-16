@@ -33,35 +33,38 @@ function updateLead(l: number, r: number) {
  */
 setTimeout(() => (window.location.hash = "#modview"), 1000);
 
-const TRANSITIONS: Record<ViewType, {
-  left?: ViewType;
-  middle?: ViewType;
-  right?: ViewType;
-}> = {
+const TRANSITIONS: Record<
+  ViewType,
+  {
+    left?: ViewType;
+    middle?: ViewType;
+    right?: ViewType;
+  }
+> = {
   "player-info-view": {
     left: "map-pool-view",
     middle: undefined,
-    right: "warmups-pool-view"
+    right: "warmups-pool-view",
   },
   "warmups-pool-view": {
     left: "player-info-view",
     middle: "warmups-pool-view",
-    right: "player-map-view"
+    right: "player-map-view",
   },
   "map-pool-view": {
     left: "warmups-pool-view",
     middle: "player-map-view",
-    right: "player-info-view"
+    right: "player-info-view",
   },
   "player-map-view": {
     left: "map-pool-view",
     middle: "in-map-view",
-    right: "warmups-pool-view"
+    right: "warmups-pool-view",
   },
   "in-map-view": {
     left: "map-pool-view",
     middle: undefined,
-    right: "player-map-view"
+    right: "player-map-view",
   },
 };
 const VIEW_TYPE_TITLES: Record<ViewType, string> = {
@@ -84,7 +87,13 @@ function onSwitch() {
   lastView.value = currentView.value;
   currentView.value = selectedView.value;
   nextViews.value = TRANSITIONS[currentView.value];
+
+  relayConnection.send({
+    command: "view-update",
+    viewMode: currentView.value,
+  });
 }
+
 </script>
 
 <template>
@@ -107,10 +116,7 @@ function onSwitch() {
               :selected="selectedView === currentView"
               @click="() => (selectedView = currentView)"
             >
-              <ViewSelector
-                :relayConnection="relayConnection"
-                :view="currentView"
-              />
+              <ViewSelector :relayConnection="relayConnection" :view="currentView" />
             </div>
           </div>
           <div class="next-views">
@@ -120,7 +126,10 @@ function onSwitch() {
               :selected="selectedView === nextViews.left"
               @click="() => (selectedView = nextViews.left as ViewType)"
             >
-              <ViewSelector :relayConnection="relayConnection" :view="(nextViews.left as ViewType)" />
+              <ViewSelector
+                :relayConnection="relayConnection"
+                :view="(nextViews.left as ViewType)"
+              />
             </div>
             <div
               class="view middle-view"
@@ -128,7 +137,10 @@ function onSwitch() {
               :selected="selectedView === nextViews.middle"
               @click="() => (selectedView = nextViews.middle as ViewType)"
             >
-              <ViewSelector :relayConnection="relayConnection" :view="(nextViews.middle as ViewType)" />
+              <ViewSelector
+                :relayConnection="relayConnection"
+                :view="(nextViews.middle as ViewType)"
+              />
             </div>
             <div
               class="view right-view"
@@ -159,7 +171,7 @@ function onSwitch() {
       </div>
     </section>
     <section>
-      <iframe src="http://127.0.0.1:5173/" frameborder="0"></iframe>
+      <iframe src="http://localhost:5173/" frameborder="0"></iframe>
     </section>
   </div>
   <Login v-else />

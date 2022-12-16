@@ -59,6 +59,10 @@ export default class RelayConnection {
         }, 5000);
     }
 
+    send(data: any) {
+        this.relaySocket.send(JSON.stringify(data));
+    }
+
     getUsersScoresaberIds() {
         return {
             left: computed(() => this.players.value[0]?.user_id),
@@ -255,6 +259,9 @@ export default class RelayConnection {
             case "twitch-update":
                 this.leftTwitch.value = data.leftTwitch;
                 this.rightTwitch.value = data.rightTwitch;
+                break;
+            case "view-update":
+                this.viewMode.value = data.viewMode;
                 break;
         }
 
