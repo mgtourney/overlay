@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import RelayConnection from "@RelayCon";
+import { ViewType } from "@GenTypes";
 import InMapView from "./in-map-view/View.vue";
 import PlayerInfoView from "./player-info-view/View.vue";
-import RelayConnection from "../helpers/RelayConnection";
 import MapPoolView from "./map-pool-view/View.vue";
 import WarmupsPoolView from "./warmups-pool-view/View.vue";
 import PlayerMapInfoView from "./player-map-view/View.vue";
 import StartingEndingView from "./starting-ending-view/View.vue";
-import { ViewType } from "../types/general";
 
 const props = defineProps<{
   relayConnection: RelayConnection;
@@ -49,8 +49,8 @@ const showEndingView = computed(() => props.view === "ending-view");
   />
   <WarmupsPoolView :relayConnection="relayConnection" v-show="showWarumupsPoolView" />
   <PlayerMapInfoView :relayConnection="relayConnection" v-show="showPlayerMapInfoView" />
-  <StartingEndingView :starting="true" v-show="showStartingView"  />
-  <StartingEndingView :starting="false" v-show="showEndingView"  />
+  <StartingEndingView :starting="true" :relayConnection="relayConnection" v-show="showStartingView"  />
+  <StartingEndingView :starting="false" :relayConnection="relayConnection" v-show="showEndingView"  />
 </template>
 
 <style scoped>
@@ -59,8 +59,8 @@ const showEndingView = computed(() => props.view === "ending-view");
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
   z-index: -1;
 }
 

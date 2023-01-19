@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Player from "../player-info-view/Player.vue";
-import RelayConnection from "../../helpers/RelayConnection";
 import { computed } from "vue";
+import RelayConnection from "@RelayCon";
+import Player from "../player-info-view/Player.vue";
 
 const props = defineProps<{
   relayConnection: RelayConnection;
@@ -56,14 +56,12 @@ const mapImage = computed(
   width: 70vw;
   height: calc(10rem + 12px);
   margin: auto;
-  display: flex;
-  justify-content: space-between;
-  position: relative;
+  margin-top: 30%;
 }
 
 .map {
   position: absolute;
-  top: -200%;
+  top: 12%;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;

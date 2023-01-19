@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import Login from "./Login.vue";
-import { useAuth0 } from "@auth0/auth0-vue";
 import { ref } from "vue";
-import RelayConnection from "../helpers/RelayConnection";
+import RelayConnection from "@RelayCon";
+import { ViewType, Countdown } from "@GenTypes";
+import { useAuth0 } from "@auth0/auth0-vue";
+import Login from "./Login.vue";
 import ViewSelector from "./ViewSelector.vue";
 import SwitchEdit from "./mod-view/SwitchEdit.vue";
-import { ViewType } from "../types/general";
 
 const { user, isAuthenticated } = useAuth0();
 
 const relayConnection = new RelayConnection();
 const relayData = relayConnection.getData();
+let timeoutId: any;
 
 /*
 const left = ref(0);
@@ -45,11 +46,11 @@ const TRANSITIONS: Record<
   "starting-view": {
     left: undefined,
     middle: "player-info-view",
-    right: undefined,
+    right: "ending-view",
   },
   "player-info-view": {
     left: "map-pool-view",
-    middle: undefined,
+    middle: "starting-view",
     right: "warmups-pool-view",
   },
   "warmups-pool-view": {
@@ -87,6 +88,8 @@ const VIEW_TYPE_TITLES: Record<ViewType, string> = {
   "in-map-view": "1v1 Stream",
   "ending-view": "Ending",
 };
+
+const countdownStarted = ref<Countdown>(false);
 const lastView = ref<ViewType | undefined>(undefined);
 const currentView = ref<ViewType>("starting-view");
 const nextViews = ref<{
@@ -107,7 +110,31 @@ function onSwitch() {
     viewMode: currentView.value,
   });
 }
+function startCountdown() {
+  countdownStarted.value = !countdownStarted.value;
+  relayConnection.send({
+    command: "update-countdown",
+    status: countdownStarted.value,
+  });
+}
 
+function debounce(fn: any, delay: number) {
+  return (...args: any) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      fn(...args);
+    }, 250);
+  }
+}
+function countdownChange() {
+  const countdownInput = document.getElementById("countdownInput") as HTMLInputElement;
+  console.log(countdownInput.value);
+  relayConnection.send({
+    command: "update-time-left",
+    timeLeft: countdownInput.value,
+  });
+}
+const debouncedCountdownChange = debounce(countdownChange, 1000);
 </script>
 
 <template>
@@ -116,57 +143,29 @@ function onSwitch() {
       <div class="view-selector-wrapper">
         <div class="view-selector">
           <div class="last-view">
-            <div
-              class="view middle-view"
-              v-if="lastView != null"
-              :selected="selectedView === lastView"
-              @click="() => (selectedView = lastView as ViewType)"
-            >
+            <div class="view middle-view" v-if="lastView != null" :selected="selectedView === lastView"
+              @click="() => (selectedView = lastView as ViewType)">
               <ViewSelector :relayConnection="relayConnection" :view="(lastView as ViewType)" />
             </div>
           </div>
           <div class="current-view">
-            <div
-              class="view middle-view"
-              :selected="selectedView === currentView"
-              @click="() => (selectedView = currentView)"
-            >
+            <div class="view middle-view" :selected="selectedView === currentView"
+              @click="() => (selectedView = currentView)">
               <ViewSelector :relayConnection="relayConnection" :view="currentView" />
             </div>
           </div>
           <div class="next-views">
-            <div
-              class="view left-view"
-              v-if="nextViews.left"
-              :selected="selectedView === nextViews.left"
-              @click="() => (selectedView = nextViews.left as ViewType)"
-            >
-              <ViewSelector
-                :relayConnection="relayConnection"
-                :view="(nextViews.left as ViewType)"
-              />
+            <div class="view left-view" v-if="nextViews.left" :selected="selectedView === nextViews.left"
+              @click="() => (selectedView = nextViews.left as ViewType)">
+              <ViewSelector :relayConnection="relayConnection" :view="(nextViews.left as ViewType)" />
             </div>
-            <div
-              class="view middle-view"
-              v-if="nextViews.middle"
-              :selected="selectedView === nextViews.middle"
-              @click="() => (selectedView = nextViews.middle as ViewType)"
-            >
-              <ViewSelector
-                :relayConnection="relayConnection"
-                :view="(nextViews.middle as ViewType)"
-              />
+            <div class="view middle-view" v-if="nextViews.middle" :selected="selectedView === nextViews.middle"
+              @click="() => (selectedView = nextViews.middle as ViewType)">
+              <ViewSelector :relayConnection="relayConnection" :view="(nextViews.middle as ViewType)" />
             </div>
-            <div
-              class="view right-view"
-              v-if="nextViews.right"
-              :selected="selectedView === nextViews.right"
-              @click="() => (selectedView = nextViews.right as ViewType)"
-            >
-              <ViewSelector
-                :relayConnection="relayConnection"
-                :view="(nextViews.right as ViewType)"
-              />
+            <div class="view right-view" v-if="nextViews.right" :selected="selectedView === nextViews.right"
+              @click="() => (selectedView = nextViews.right as ViewType)">
+              <ViewSelector :relayConnection="relayConnection" :view="(nextViews.right as ViewType)" />
             </div>
           </div>
         </div>
@@ -175,7 +174,18 @@ function onSwitch() {
         <div class="edit-config" v-if="selectedView === currentView">
           <h2>Edit</h2>
           <h1>{{ VIEW_TYPE_TITLES[currentView] }}</h1>
-          <div></div>
+          <div>
+            <div class="options" v-if="selectedView === 'starting-view'">
+              <button @click="startCountdown()">Countdown: {{ countdownStarted? "Started": "Paused" }}</button>
+              <div v-if="!countdownStarted" class="options">
+                <label for="countdownInput" class="countdownInputLabel">Countdown Time in seconds</label>
+                <input class="countdownInput" id="countdownInput" type="range" min="60" max="600"
+                  placeholder="Seconds left" @input="debouncedCountdownChange"
+                  oninput="this.nextElementSibling.value = this.value">
+                <output for="countdownInput" id="countdownOutput">60</output>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="switch-config" v-else>
           <h2>Switch To</h2>
@@ -198,6 +208,27 @@ function onSwitch() {
 * {
   color: white;
   box-sizing: border-box;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.countdownInputLabel {
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+
+.countdownInput {
+  color: black;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .modroot {
@@ -229,7 +260,7 @@ function onSwitch() {
   cursor: not-allowed;
 }
 
-.view-selector > * {
+.view-selector>* {
   width: 100%;
   position: relative;
   flex: 0 0 calc(100vh * var(--scale));
@@ -311,7 +342,7 @@ section {
   align-items: center;
 }
 
-.modroot > section:nth-child(1) {
+.modroot>section:nth-child(1) {
   border-right: 1px solid #4d555f;
   flex: 1;
 }
@@ -331,7 +362,7 @@ section {
   margin-bottom: 0;
 }
 
-.modroot > section:nth-child(2) {
+.modroot>section:nth-child(2) {
   display: flex;
 }
 

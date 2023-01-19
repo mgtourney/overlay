@@ -1,6 +1,5 @@
-import { MapPoolInfo } from './../types/general.d';
 import { ref, Ref, computed, ComputedRef } from 'vue';
-import { RelayDataRefs, ViewType, PoolMap } from "../types/general";
+import { MapPoolInfo, RelayDataRefs, ViewType, PoolMap } from "@GenTypes";
 
 export default class RelayConnection {
 
@@ -15,6 +14,8 @@ export default class RelayConnection {
     private rightTwitch: Ref<string>;
     private viewMode: Ref<ViewType>;
     private currentMapPool: Ref<string>;
+    private counting: Ref<any>;
+    private timeLeft: Ref<number>;
 
     constructor() {
         this.disconnected = ref(true);
@@ -28,8 +29,10 @@ export default class RelayConnection {
         });
         this.leftTwitch = ref("");
         this.rightTwitch = ref("");
-        this.viewMode = ref("player-map-view");
+        this.viewMode = ref("starting-view");
         this.currentMapPool = ref("1");
+        this.counting = ref(false);
+        this.timeLeft = ref(60);
 
         this.relaySocket = new WebSocket("ws://localhost:2223");
         this.relaySocket.onmessage = message => this.onmessage(message);
@@ -178,6 +181,8 @@ export default class RelayConnection {
             mapPool: mapPoolInfo,
             mapPoolMap: mapPoolMap,
             viewMode: this.viewMode,
+            counting: this.counting,
+            timeLeft: this.timeLeft,
         };
     }
 
@@ -262,6 +267,12 @@ export default class RelayConnection {
                 break;
             case "view-update":
                 this.viewMode.value = data.viewMode;
+                break;
+            case "update-countdown":
+                this.counting.value = data.counting;
+                break;
+            case "update-time-left":
+                this.timeLeft.value = data.timeLeft;
                 break;
         }
 

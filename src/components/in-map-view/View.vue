@@ -2,7 +2,7 @@
 import Header from "./Header.vue";
 import Main from "./Main.vue";
 import Footer from "./Footer.vue";
-import RelayConnection from "../../helpers/RelayConnection";
+import RelayConnection from "@RelayCon";
 
 const props = defineProps<{
   relayConnection: RelayConnection;

@@ -6,6 +6,7 @@
 
 * {
   font-family: "Work Sans", sans-serif;
+  user-select: none;
 }
 
 html {

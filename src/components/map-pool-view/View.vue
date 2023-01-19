@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import RelayConnection from "../../helpers/RelayConnection";
-import { PoolMap } from "../../types/general";
+import RelayConnection from "@RelayCon";
+import { PoolMap } from "@GenTypes";
 import MPVMap from "./Map.vue";
 
 const props = defineProps<{

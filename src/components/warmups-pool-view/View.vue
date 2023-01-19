@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import MapPoolView from "./../map-pool-view/View.vue";
-import RelayConnection from "../../helpers/RelayConnection";
+import RelayConnection from "@RelayCon";
 
 const props = defineProps<{
   relayConnection: RelayConnection;

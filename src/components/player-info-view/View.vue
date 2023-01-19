@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Player from "./Player.vue";
-import RelayConnection from "../../helpers/RelayConnection";
+import RelayConnection from "@RelayCon";
 
 const props = defineProps<{
   relayConnection: RelayConnection;
@@ -35,7 +35,7 @@ const relayData = props.relayConnection.getData();
 <style scoped>
 .player-info-view {
   width: 70vw;
-  height: calc(10rem + 12px);
+  height: 100%;
   margin: auto;
   display: flex;
   justify-content: space-between;

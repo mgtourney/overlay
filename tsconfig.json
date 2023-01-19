@@ -12,7 +12,11 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "noEmit": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "paths": {
+      "@RelayCon": ["./src/helpers/RelayConnection"],
+      "@GenTypes": ["./src/types/general"],
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]

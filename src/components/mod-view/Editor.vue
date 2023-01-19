@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { ModEditorConfig } from "../../types/general"
+import { ModEditorConfig } from "@GenTypes"
 
 const props = defineProps<{
   config: ModEditorConfig[],

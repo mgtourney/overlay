@@ -53,6 +53,8 @@ export interface RelayDataRefs {
     rightSeed: ComputedRef<number>
     mapPool: ComputedRef<MapPoolInfo>
     mapPoolMap: ComputedRef<PoolMap>
+    counting: Ref<boolean>
+    timeLeft: Ref<number>
 }
 
 export type ElementType = "input" | "select" | "checkbox" | "button";
@@ -64,3 +66,5 @@ export interface ModEditorConfig {
 export type ViewType = 
     "in-map-view" | "player-info-view" | "map-pool-view" | "warmups-pool-view" | 
     "player-map-view" | "starting-view" | "ending-view"
+
+export type Countdown = true | false

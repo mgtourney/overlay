@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import RelayConnection from "../helpers/RelayConnection";
+import RelayConnection from "@RelayCon";
 import ViewSelector from "./ViewSelector.vue";
 
 const relayConnection = new RelayConnection();
